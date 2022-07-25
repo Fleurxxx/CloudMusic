@@ -1,0 +1,98 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+li{
+    list-style-type: none;/* 去掉li前的点 */
+    float: left;/*将li设置成做浮动，变为联动*/
+    height: 70px;
+}
+a{
+    text-decroation: none;/*文本没有下划线*/
+}
+/*确定版心*/
+.w{
+    width:1200px;
+    margin: auto;/*让元素水平居中*/
+}
+.header{
+    height: 42px;
+    margin:30px auto;
+}
+.a-logo,.a-logo-immg{
+    float: left;
+    width: 150px;
+    height: 50px;
+}
+.a-nav1 li{/*设置导航栏的框框*/
+    margin: 30px auto;/*框框整体的位置，30px是指离网页的顶部和下部的距离，auto控制的是左右距离为自动调节*/
+    width: 800px;/*框框的宽度*/
+    height: 100%;/*框框的长度*/
+    padding: 0px;/*将框框的padding设置为零，不然会导致框框里的内容与框边缘有间隔*/
+    border:1px solid #000;/*添加边框*/
+    display: inline;
+}
+
+.a-nav a{
+    display: block;/*将a变成块状*/
+    width: 100px;/*设置块的宽度*/
+    height: 50px;/*设置块的长度*/
+    font-family: Microsoft Yahei;
+    line-height: 50px;/*设置字体在块中的高度*/
+    background-color: #2f4f4f;
+    margin: 0px 0px;/*块里的高宽通过margin设置*/
+    color: #fff;
+    text-align: center;/*字体居中*/
+    text-decoration: none;/*去掉下划线*/
+    font-size: 15px;
+}
+a:hover{
+    background-color: #2f6f4f;
+}
+.a-search{
+    float: left;
+    width: 155px;
+    height: 35px;
+    /*background-color: #00a4ff;*/
+    border: 2px solid #7a7374;/**边框*/
+    margin-left: 50px;/*外边距*/
+    border-radius: 25px;/*圆角*/
+    cursor: text;/*鼠标指针：文本竖标*/
+}
+.a-search input{
+    border-radius: 25px;/*圆角*/
+    float: left;
+    width: 100px;
+    height: 35px;
+    border-right: 0;
+    color: #ffffff;
+    border:#ffffff;
+    font-size: 14px;
+    padding-left: 15px;
+    /*border:none;*/
+    outline: none;
+
+}
+.a-search button{
+    float: left;
+    width: 50px;
+    height: 42px;
+    /* 去掉按钮默认边框 */
+    border: 0;
+    background: url(../img/搜索.png);
+}
+.a-head-immg{
+    width: 20px;
+    height: 20px;
+}
+.a-user {
+    float: left;
+    margin-left:65px;
+}
+.a-bottom{
+    float: bottom;
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    right: 0;
+}
