@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace=绑定一个指定的dao/mapper接口-->
+<mapper namespace="com.dao.UserDao">
+    <!--select查询语句-->
+    <select id="getUserList" resultType="com.entity.User">
+         select * from test_nc.user
+    </select>
+
+<!--    根据id查询用户信息-->
+    <select id="getUserById" parameterType="int" resultType="com.entity.User">
+        select * from test_nc.user where user_id = #{user_id}
+    </select>
+
+<!-- 添加用户   对象中的属性，可以直接取出来-->
+    <insert id="addUser" parameterType="com.entity.User">
+        insert into test_nc.user(user_id,email,password,user_phone,user_date,user_type)
+        values (#{user_id},#{email},#{password},#{user_phone},#{user_date},#{user_type});
+    </insert>
+<!--    修改用户信息-->
+    <insert id="updateUser" parameterType="com.entity.User">
+        update test_nc.user set user_name=#{user_name},password=#{password} where user_id=#{user_id};
+    </insert>
+
+    <insert id="deleteUser" parameterType="com.entity.User">
+        delete from test_nc.user where user_id=#{user_id};
+    </insert>
+
+    <select id="getUserLike" resultType="com.entity.User" >
+        select * from test_nc.user where user_name like "%"#{value}"%"
+    </select>
+</mapper>

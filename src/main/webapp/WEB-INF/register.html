@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" type="text/css" href="css/register.css"/>
+    <script>
+
+    // function fun() {
+    //         var xhttp;
+    //         if (window.XMLHttpRequest) {
+    //             xhttp = new XMLHttpRequest();
+    //         } else {
+    //             // code for IE6, IE5
+    //             xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    //         }
+    //         xhttp.open("GET","registerServlet?code",false);
+    //     }
+
+        function fun() {
+            let num = 59;
+            let msgbtn = document.getElementById("sendcode");
+            this.disabled = true; //设置按钮不可用
+            var myId = setInterval(function () {
+                num--;
+                if (num > 0) {
+                    // msgtxt.innerHTML = `${num}秒之后获取验证码`;
+                    msgbtn.value = `${num}秒`;
+                } else {
+                    msgbtn.value = `重获验证码`;
+                    msgbtn.disabled = false;//设置按钮可用
+                    clearInterval(myId);
+                }
+            }, 1000)
+        }
+    </script>
+</head>
+<body>
+
+<div class="register-box">
+    <h2>网易云音乐</h2>
+    <form action="registerServlet" method="post">
+        <div class="input-box">
+            <input type="tel" name="phone" id="phone" placeholder="请输入手机号">
+        </div>
+        <div class="input-box">
+            <input type="password" name="password" required="" placeholder="请输入密码">
+        </div>
+        <div class="input-box">
+            <input type="password" name="passwordagain" required="" placeholder="请再次输入密码">
+        </div>
+        <div class="input-box">
+            <input type="text" name="email" required="" id="email" placeholder="请输入您的邮箱">
+        </div>
+        <div class="verify-box">
+            <div class="verify-text">
+                <input type="text" name="code" id="code"  placeholder="请输入验证码">
+                <input class="msg-button" type="submit" name="sendcode" id="sendcode" value="获取验证码" onclick="fun()">
+            </div>
+        </div>
+        <div class="check-box">
+            <input  type="checkbox" id="ch" onclick="if (this.checked) {enable()} else {disable()}"/> 同意
+            <a href="https://st.music.163.com/official-terms/service" target="_blank">《服务条款》</a>
+            <a href="https://st.music.163.com/official-terms/privacy" target="_blank">《隐私政策》</a>
+            <a href="https://st.music.163.com/official-terms/children" target="_blank">《儿童隐私政策》</a>
+        </div>
+        <input class="input-button" type="submit" id="but" disabled="true" value="注册">
+        <div class="sign-up">
+            已有账户！   <a href="login.html">立即登录</a>
+        </div>
+    </form>
+    <script>
+        email.onchange = function(){
+            let email = this.value;
+            let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+            if(reg.test(email)){
+            }else{
+                alert("邮箱格式不正确");
+            }
+        }
+        function disable()
+        {
+            document.getElementById("but").disabled=true;
+            alert("未勾选不能注册");
+        }
+        function enable()
+        {
+            document.getElementById("but").disabled=false;
+        }
+
+    </script>
+
+</div>
+</body>
+</html>
