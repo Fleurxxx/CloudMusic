@@ -25,7 +25,7 @@ body{
     /*这个z-index值要设置为最小，其他内容才能显示在背景图之上（最小就行，-1000是我随便设置的）*/
     z-index:-1000;
     min-height: 100vh;
-    background-image: url("../img/登录背景.png");
+    background-image: url("../img/images/登录背景.png");
     /*background-image: linear-gradient(120deg, #3498db, #8e44ad);*/
 }
 
@@ -67,6 +67,7 @@ body{
     padding: 0 5px;
     height: 40px;
 }
+
 
 .input-button{
     display: block;

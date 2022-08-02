@@ -15,7 +15,7 @@
 <body>
 <div class="login-box">
     <h2>网易云音乐</h2>
-    <form action="login.html" method="post">
+    <form action="" method="post">
         <div class="input-box">
             <input type="text" name="username" required="" placeholder="用户名">
         </div>

@@ -1,4 +1,4 @@
-package src.main.java.com.util;
+package com.util;
 
 public class DBUtil {
 }

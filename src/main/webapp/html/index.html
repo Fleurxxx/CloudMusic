@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+</head>
+<script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<body>
+    <div class="header">
+        <!-- 顶部导航栏，发现音乐、我的音乐、动态、音乐人、搜索框、登录按钮 -->
+        <header class="index_header" id="index_header">
+            <!--  标志  -->
+            <div class="LOGO">
+                <img class="LOGO" src = "../img/images/logo.png" align="center"> <span>网易云音乐</span>
+            </div>
+            <!-- 发现音乐、我的音乐、动态、音乐人 -->
+            <nav class="index_header_nav">
+                <input type="radio" id="header_radio1" checked="checked" name="indexHeaderA" />
+                <a href="IndexIframe.html" target="main" id="header_a1">发现音乐</a>
+                <input type="radio" id="header_radio2" name="indexHeaderA" />
+                <a target="main" id="header_a2">我的音乐</a>
+                <input type="radio" id="header_radio3" name="indexHeaderA" />
+                <a id="header_a3">动态</a>
+                <input type="radio" id="header_radio4" name="indexHeaderA" />
+                <a id="header_a4">音乐人</a>
+            </nav>
+            <!-- 搜索框 -->
+            <div class="index_header_seek">
+                <form action="">
+                    <input type="text" placeholder="" id="searchSongName_input" align="center" placeholder="输入关键词" />
+                    <input type="button" id="search_button" value="搜索" align="center" />
+                </form>
+            </div>
+            <!-- 登录前“登录按钮”， 登录后显示用户名及相关菜单 -->
+            <div class="index_header_login" id="index_login_div" >
+
+            </div>
+            <!--  用户  -->
+            <div class="a-user">
+                <img class="a-head-immg" src="../img/images/头像2.png" style="vertical-align: middle">
+                <a href="personalCenter.html">Diaozy-</a>
+            </div>
+        </header>
+    </div>
+<!--    中间的小导航栏-->
+    <div class="clear"></div>
+    <div class="header_a1_little_menu">
+        <div>
+            <input type="radio" id="little_menu_input1" checked="checked" name="menu_input" />
+            <a href="IndexIframe.html" target="main" id="menu_a1">推荐</a>
+            <input type="radio" id="little_menu_input2" name="menu_input" />
+            <a href="SongRankingList.html" target="main" id="menu_a2">排行榜</a>
+            <input type="radio" id="little_menu_input3" name="menu_input" />
+            <a id="menu_a3" href="MoreSongList.html" target="main">歌单</a>
+            <input type="radio" id="little_menu_input4" name="menu_input" />
+            <a id="menu_a4">歌手</a>
+        </div>
+    </div>
+
+    <footer class="index_footer">
+        <div class="audio_div">
+            <span id="songPlay_name" style="display: inline-block;"></span>
+            <audio id="userPlaySong" src="" autoplay="autoplay" controls="controls" ></audio>
+        </div>
+    </footer>
+    <script>
+        var userName = sessionStorage.getItem("userName");
+        function setLodinDivUserName() {
+            if(userName != "undefined" && userName != null){
+                //登录后
+                //填充显示用户名的盒子
+                var showUserNameSpan = $("<span>", {}).appendTo($("#index_login_div"));
+                $(showUserNameSpan).html(userName);
+                //填充菜单
+                var login_after = $("<div>",{
+                    id:'login_after',
+                    class:'login_way'
+                }).appendTo($("#index_login_div"));
+
+                var myHome_p = $("<p>",{
+                    class:'login_yet_MyHome'
+                }).appendTo(login_after);
+
+                var home_a = $("<a>",{
+                    href:"PersonalCenter.html",
+                    target:'main'
+                }).appendTo(myHome_p);
+
+                $(home_a).html("个人中心");
+
+                var setting_p = $("<p>",{
+                    class:'login_yet_Setting'
+                }).appendTo(login_after);
+
+                var set_a = $("<a>",{
+                    href:"AccountSetting.html",
+                    target:'main'
+                }).appendTo(setting_p);
+
+                $(set_a).html("个人设置");
+
+                var exit_p = $("<p>",{
+                    class:'login_yet_exit'
+                }).appendTo(login_after);
+
+                var exit = $("<a>",{
+//				href:'/Exit'
+                }).appendTo(exit_p);
+
+                $(exit).html("退出");
+
+            }else{
+                //登录前
+                var login_before = $("<div>",{
+                    id:'login_before'
+                }).appendTo($("#index_login_div"));
+
+                var loginName = $("<span>", {
+                    id:'login_text'
+                }).appendTo(login_before);
+                $(loginName).html("登录");
+
+                var login_way = $("<div>",{
+                    class:'login_way'
+                }).appendTo(login_before);
+
+                var login_phone_p = $("<p>",{
+                    class:'login_phone_p'
+                }).appendTo(login_way);
+
+                var phone_login_img = $("<img/>",{
+                    alt:'',
+                    src:'images/phone.png',
+                    height:'17',
+                    align:'center'
+                }).appendTo(login_phone_p);
+
+                $(login_phone_p).append("手机号登录");
+
+                var login_zhanghao_p = $("<p>",{
+                    class:'login_zhanghao_p'
+                }).appendTo(login_way);
+
+                var loginId_login_img = $("<img/>",{
+                    alt:'',
+                    src:'images/zhanghao.png',
+                    height:'17',
+                    align:'center'
+                }).appendTo(login_zhanghao_p);
+
+                $(login_zhanghao_p).append("账号登录");
+            }
+        }
+        setLodinDivUserName();
+        $("nav[class='index_header_nav'] a").click(function(){
+            if($(this).index() != 1){
+                $("div[class='header_a1_little_menu']").children().filter("div").css("display","none");
+                $("div[class='header_a1_little_menu']").css("height","5px");
+            }else{
+                $("div[class='header_a1_little_menu']").children().filter("div").css("display","block");
+                $("div[class='header_a1_little_menu']").css("height","35px");
+            }
+            $("nav[class='index_header_nav'] input").each(function(index, element){
+                $("nav[class='index_header_nav'] input:checked").attr("checked", false);
+            });
+            $(this).prev().attr('checked',true);
+        })
+
+        $("div[class='header_a1_little_menu'] a").click(function(){
+            var thisA = this;
+            $("div[class='header_a1_little_menu'] input").each(function(index, element){
+                $("div[class='header_a1_little_menu'] input:checked").attr("checked", false);
+            });
+            $(this).prev().attr('checked',true);
+        })
+        //登录方式显示
+        $("div[class='index_header_login']").mouseover(function(){
+            $("div[class='login_way']").css("display","block");
+        })
+        $("div[class='index_header_login']").mouseout(function(){
+            $("div[class='login_way']").css("display","none");
+        })
+    </script>
+</body>
+</html>

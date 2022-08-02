@@ -14,22 +14,26 @@ public class User {
     private String user_detail;
     private String user_date;
     private String user_birth;
+    private String code;
+
+    private int num_fans;
+    private int num_focus;
 
 
-    public String getUser_date() {
-        return user_date;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setUser_date(String user_date) {
-        this.user_date = user_date;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
-    public String getUser_birth() {
-        return user_birth;
+    public int getUser_phone() {
+        return user_phone;
     }
 
-    public void setUser_birth(String user_birth) {
-        this.user_birth = user_birth;
+    public void setUser_phone(int user_phone) {
+        this.user_phone = user_phone;
     }
 
     public int getUser_type() {
@@ -46,22 +50,6 @@ public class User {
 
     public void setUser_state(int user_state) {
         this.user_state = user_state;
-    }
-
-    public int getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
-    public int getUser_phone() {
-        return user_phone;
-    }
-
-    public void setUser_phone(int user_phone) {
-        this.user_phone = user_phone;
     }
 
     public String getUser_name() {
@@ -112,6 +100,46 @@ public class User {
         this.user_detail = user_detail;
     }
 
+    public String getUser_date() {
+        return user_date;
+    }
+
+    public void setUser_date(String user_date) {
+        this.user_date = user_date;
+    }
+
+    public String getUser_birth() {
+        return user_birth;
+    }
+
+    public void setUser_birth(String user_birth) {
+        this.user_birth = user_birth;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public int getNum_fans() {
+        return num_fans;
+    }
+
+    public void setNum_fans(int num_fans) {
+        this.num_fans = num_fans;
+    }
+
+    public int getNum_focus() {
+        return num_focus;
+    }
+
+    public void setNum_focus(int num_focus) {
+        this.num_focus = num_focus;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -127,6 +155,9 @@ public class User {
                 ", user_detail='" + user_detail + '\'' +
                 ", user_date='" + user_date + '\'' +
                 ", user_birth='" + user_birth + '\'' +
+                ", code='" + code + '\'' +
+                ", num_fans=" + num_fans +
+                ", num_focus=" + num_focus +
                 '}';
     }
 }

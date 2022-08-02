@@ -10,9 +10,9 @@ public class UserDaoTest {
 
     @Test
     public void test(){
+        //查询全部用户
         //第一步：获取SqlSession对象
         SqlSession sqlSession = MybatisUtils.getSqlSession();
-
         try{
             //1>getMapper
             UserDao userDao = sqlSession.getMapper(UserDao.class);
@@ -66,8 +66,23 @@ public class UserDaoTest {
         User user = new User();
         user.setUser_id(1);
         user.setUser_name("彭润泽");
-        user.setPassword("123123");
+        user.setUser_phone(1231242354);
         int res = mapper.updateUser(user);
+        if(res>0){
+            System.out.println("修改成功");
+        }
+        sqlSession.commit();
+        sqlSession.close();
+    }
+
+    @Test//修改密码
+    public void updatePwd(){
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        UserDao mapper = sqlSession.getMapper(UserDao.class);
+        User user = new User();
+        user.setEmail("123123123@qq.com");
+        user.setPassword("1111");
+        int res = mapper.updatePwd(user);
         if(res>0){
             System.out.println("修改成功");
         }
@@ -97,6 +112,14 @@ public class UserDaoTest {
         for (User user : userList) {
             System.out.println(user);
         }
+        sqlSession.close();
+    }
+    @Test
+    public void checkUserName(){
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        UserDao mapper = sqlSession.getMapper(UserDao.class);
+        Boolean user = mapper.checkUserName("彭");
+        System.out.println(user);
         sqlSession.close();
     }
 }

@@ -1,9 +1,6 @@
 package com;
 
-import src.main.java.com.dao.BaseDao;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.dao.BaseDao;
 
 public class deleteSql {
     public static void main(String[] args){

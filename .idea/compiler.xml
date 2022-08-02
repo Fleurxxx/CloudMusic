@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <option name="BUILD_PROCESS_HEAP_SIZE" value="1200" />
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -10,5 +11,6 @@
         <module name="untitled4" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel target="8" />
   </component>
 </project>

@@ -1,4 +1,4 @@
-package src.main.java.com.util;
+package com.util;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -16,7 +16,7 @@ public class MD5 {
     /*
      * 生成md5 有传入参数字符串
      */
-    public String generateMD5(String input){
+    public static String generateMD5(String input){
         StringBuffer sb=null;
         try {
             //1.初始化MessageDigest信息摘要对象,并指定为MD5不分大小写都可以
@@ -48,5 +48,20 @@ public class MD5 {
         }
         return sb.toString();
     }
+
+    /**
+     * 根据email获取gravatar头像
+     *
+     * @param email Email
+     * @return 头像URL
+     */
+    public static String getGravatar(String email) {
+        //设置图片大小32px
+        return "http://cn.gravatar.com/avatar/" + generateMD5(email) + "?s=128&d=identicon&r=PG";
+    }
+    //显示头像的情况：
+    //一种是已经在gravatar网站上添加过对应邮箱的头像，访问这个url的时候则直接显示设置的图片。
+    //没有添加过邮箱的头像，访问这个url时会显示默认的图片G
+    //如果没有给邮箱添加过头像，但是不想要默认的图片G，可以添加参数d=identicon，则可以随机生成头像，但是生成之后就不会再变了
 
 }

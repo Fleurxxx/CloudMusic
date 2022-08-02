@@ -1,4 +1,4 @@
-package src.main.java.com.dao;
+package com.dao;
 
 import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import src.main.java.com.util.JDBCUtil;
@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * 只有登录注册用到了
+ */
 public class BaseDao {
     //增删改的必要条件
     //sql语句
