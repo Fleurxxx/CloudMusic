@@ -1,0 +1,97 @@
+body{
+    margin: 0;
+}
+.userSetting_title{
+    width: 900px;
+    margin: 0 auto;
+    padding-top: 50px;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #C20C0C;
+}
+.accountSetContent{
+    width: 1000px;
+    height: 800px;
+    border-left: 1px solid #696969;
+    border-right: 1px solid #696969;
+    margin: 0 auto;
+}
+.userInfo_table{
+    float: left;
+    margin-left: 50px;
+}
+.userInfo_table tr td:nth-child(1){
+    text-align: right;
+}
+#PersoalCenter{
+    color: dodgerblue;
+    font-size: 18px;
+    font-weight: 400;
+}
+#PersoalCenter:hover{
+    cursor: pointer;
+}
+#loginid,
+#email,
+#phoneno{
+    width: 350px;
+    height: 30px;
+}
+#sign_text{
+    width: 350px;
+    height: 100px;
+    resize: none;
+}
+.save_userInfo{
+    width: 80px;
+    height: 35px;
+    background: #2F7FCC;
+    border: 0;
+    border-radius: 3px;
+}
+.userHeader_img_div{
+    float: left;
+    width: 180px;
+    height: 180px;
+    margin-left: 50px;
+    position: relative;
+}
+.userHeader_img_div img{
+    display: block;
+    width: 180px;
+    height: 180px;
+    background: red;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.userHeader_img_div p{
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 0;
+    width: 180px;
+    height: 35px;
+    background: rgba(66,66,66,0.7);
+    text-align: center;
+    line-height: 35px;
+    font-size: 14px;
+    color: #fff;
+}
+.userHeader_img_div p:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+.inp::-webkit-input-placeholder{
+    color: red;
+}
+.inp:-ms-input-placeholder{
+    color: red;
+}
+.inp::-moz-placeholder{
+    color: red;
+}
+.inp:-moz-placeholder{
+    color: red;
+}

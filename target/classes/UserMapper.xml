@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace=绑定一个指定的dao/mapper接口-->
+<mapper namespace="com.dao.UserDao">
+    <!--select查询语句-->
+    <select id="getUserList" resultType="com.entity.User">
+         select * from test_nc.user
+    </select>
+
+<!-- 添加用户   对象中的属性，可以直接取出来-->
+    <insert id="addUser" parameterType="com.entity.User">
+        insert into test_nc.user(user_id,user_name,email,password,user_phone,user_date,user_type,user_state)
+        values (#{user_id},#{user_name},#{email},#{password},#{user_phone},#{user_date},#{user_type},#{user_state});
+    </insert>
+<!--    修改用户信息-->
+<!--    <insert id="updateUsers" parameterType="com.entity.User">-->
+<!--        update test_nc.user set user_name=#{user_name},password=#{password} where user_id=#{user_id};-->
+<!--    </insert>-->
+
+    <insert id="deleteUser" parameterType="com.entity.User">
+        delete from test_nc.user where user_id=#{user_id};
+    </insert>
+
+    <select id="getUserLike" resultType="com.entity.User" >
+        select * from test_nc.user where user_name like "%"#{value}"%"
+    </select>
+
+    <select id="getUsername" resultType="com.entity.User">
+        select user_name from test_nc.user where user_name=#{user_name};
+    </select>
+
+<!--查询（根据用户名称查找）用于Ajax判断此名称是否已经被使用-->
+    <select id="checkUserName" parameterType="string" resultType="boolean">
+        <![CDATA[ select count(1) from test_nc.user where user_name=#{user_name} ]]>
+    </select>
+    <!--  查询（根据邮箱查找）用于Ajax判断此邮箱是否已经被使用-->
+    <select id="checkEmail" parameterType="string" resultType="boolean">
+        <![CDATA[ select count(1) from test_nc.user where email=#{email} ]]>
+    </select>
+
+    <!--  查询（根据邮箱查找id） -->
+    <select id="getIdByEmail" parameterType="string" resultType="int">
+        <![CDATA[ select user_id from test_nc.user where email=#{email} ]]>
+    </select>
+    <!--    修改密码   -->
+    <insert id="updatePwd" parameterType="com.entity.User">
+        update test_nc.user set password=#{password} where user_id=#{user_id};
+    </insert>
+    <!--    根据id查询用户信息   -->
+    <select id="getUserById" parameterType="int" resultType="com.entity.User">
+        select *,
+        (select count(*) from test_nc.fans where fans_focusid=#{user_id} and fans_type=1) as num_focus,
+        (select count(*)from test_nc.fans where fans_id=#{user_id} and fans_type=1) as num_fans
+        from test_nc.user
+        <where>
+            <if test="user_id!=null">
+                and user_id=#{user_id}
+            </if>
+        </where>
+    </select>
+    <!--    修改个人资料   -->
+    <insert id="updateUser" parameterType="com.entity.User">
+        update test_nc.user set user_name=#{user_name},user_gender=#{user_gender},user_birth=#{user_birth},user_phone=#{user_phone},user_detail=#{user_detail} where user_id=#{user_id};
+    </insert>
+</mapper>
