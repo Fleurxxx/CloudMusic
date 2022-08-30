@@ -4,8 +4,8 @@ package com.entity;
 public class User {
     private int user_id;
     private int user_phone;
-    private int user_type;
-    private int user_state;
+    private int user_type; //类型，0普通用户，1vip用户，2歌手
+    private int user_state; //用户状态，0可用，1不可用（封号），2账号已注销
     private String user_name;
     private String email;
     private String password;

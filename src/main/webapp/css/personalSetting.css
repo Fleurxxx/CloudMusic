@@ -1,5 +1,6 @@
 body{
     margin: 0;
+
 }
 .userSetting_title{
     width: 900px;
@@ -18,7 +19,7 @@ body{
 }
 .userInfo_table{
     float: left;
-    margin-left: 50px;
+    margin-left: 150px;
 }
 .userInfo_table tr td:nth-child(1){
     text-align: right;

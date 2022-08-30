@@ -7,6 +7,7 @@
     <script src="../js/jquery-3.2.1.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript"></script>
+    <link rel="shortcut icon" href="../img/vectorgraph/icon.png" type="image/x-icon">
 <!--    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>-->
 </head>
 <body>
@@ -34,6 +35,8 @@
             }
         }
         function loginbt() {
+            let account = document.getElementById("email").value;
+            console.log(typeof account);
             const userinfo = {
                 email:document.getElementById("email").value,
                 password:document.getElementById("password").value
@@ -43,11 +46,16 @@
                 url:'http://localhost:8080/userServlet?method=loginn',
                 data:userinfo
             }).then(function (response) {
-                console.log(response+"ooo");
+                console.log(response);
                 alert(response.data.message);
                 if(response.data.code===200)
                 {
-                    location.href="index.html";
+                    console.log(account);
+                    if(account=="123456"){
+                        location.href="admin.html";
+                    }else{
+                        location.href="index.html";
+                    }
                 }
             })
         }

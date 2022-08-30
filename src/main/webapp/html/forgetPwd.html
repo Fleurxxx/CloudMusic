@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>忘记密码</title>
     <link rel="stylesheet" type="text/css" href="../css/forgetPwd.css"/>
+    <link rel="shortcut icon" href="../img/vectorgraph/icon.png" type="image/x-icon">
     <script src="../js/jquery-3.2.1.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript"></script>
@@ -30,14 +31,14 @@
             <input type="password" name="again" id="again" required="" placeholder="请再次输入密码">
             <span id="s_again"></span>
         </div>
-        <input class="input-button" type="button" id="but" name="but"  value="注册">
+        <input class="input-button" type="button" id="but" name="but"  value="确认修改">
         <div class="sign-up">
             想起来了！   <a href="login.html">返回登录</a>
         </div>
     </form>
 </div>
 <script>
-    console.log(axios)
+    console.log(axios);
     window.onload=function () {
         //判断密码格式
         document.getElementById("password").onblur = function () {

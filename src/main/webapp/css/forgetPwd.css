@@ -42,11 +42,11 @@ body{
     transform: translate(-50%, -50%);
 }
 
-.register-box h2{
+.forget-box h2{
     text-align: center;
     margin-bottom: 32px;
 }
-.register-box span{
+.forget-box span{
     vertical-aline:middle;
 }
 

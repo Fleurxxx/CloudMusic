@@ -1,9 +1,32 @@
 @CHARSET "UTF-8";
 /*轮播图开始*/
-body,html{
-    padding:0;
-    margin:0;
-    overflow-x:hidden;
+td, th {
+    text-align: center;
+    vertical-align: center;
+}
+body{
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    /*background-image: url("images/2.jpg");*/
+    background-size:100% 100%;
+    background-attachment: fixed;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+}
+/*滚动条*/
+.list-pre-scrollable{
+    max-height: 640px;
+    /*overflow-y: scroll;*/
+    margin-bottom: 400px;
+}
+.list-row{
+    margin-right: -1px;
+    margin-left: 0px;
+    /* 100%的窗口高度 */
+    height: 100vh;
 }
 #zong_div{
     width:100%;
@@ -97,7 +120,7 @@ body,html{
 }
 .index_reco_1{
     width:700px;
-    height:60px;
+    height:100vh;
     margin:0 auto;
     border-bottom:2px solid #C10D0C;
     line-height:85px;
@@ -161,6 +184,7 @@ body,html{
 .index_songList_1 ul{
     margin:0;
     padding:0;
+    text-align: center;
 }
 .index_songList_1 li{
     width:150px;
@@ -342,7 +366,7 @@ body,html{
     display: none;
     width: 20px;
     height: 20px;
-    background: url(../images/addSongToSongList.png);
+    background: url(../img/vectorgraph/addSongToSongList.png);
     background-repeat: no-repeat;
     background-size: 100%;
 }
@@ -364,7 +388,7 @@ body,html{
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 0 15px #666;
-    overflow-y: none;
+    overflow-y: hidden;
     overflow-x: auto;
 }
 .addSongList_showDiv::-webkit-scrollbar{
@@ -452,7 +476,6 @@ body,html{
     width: 10px;
     height: 10px;
     border-radius: 50%;
-
     margin-right: 5px;
     background-color: rgba(33,33,33,0.5);
 }
@@ -502,20 +525,49 @@ body,html{
     float:left;
     border-right:1px solid #999;
 }
+
 .index_reco_1{
     width:700px;
     height:60px;
     margin:0 auto;
     border-bottom:2px solid #C10D0C;
-    line-height:85px;
+    line-height:65px;
+
 }
 .index_reco_1 i{
-    display:inline-block;
+    /*display:inline-block;*/
     width:6px;
     height:6px;
     border:4px solid #C10D0C;
     border-radius:8px;
     margin-left:8px;
+}
+.index-table{
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: center;
+}
+.success th{
+    padding: 8px;
+    line-height: 1.42857143;
+    text-align: center;
+    background-color: rgba(111, 96, 96, 0.27);
+}
+.index-table>tbody>tr{
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: center;
+    background-color: rgba(111, 96, 96, 0.27);
+}
+.index-table>tbody>tr>td,
+.index-table>tbody>tr>th {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: center;
+    /*background-color: rgb(255, 255, 255);*/
 }
 #remenSongList{
     font-size:20px;
@@ -566,8 +618,10 @@ body,html{
 
 }
 .index_songList_1 ul{
-    margin:0;
-    padding:0;
+    /*margin:0;*/
+    /*padding:0;*/
+    text-align: center;
+
 }
 .index_songList_1 li{
     width:150px;
@@ -749,7 +803,7 @@ body,html{
     display: none;
     width: 20px;
     height: 20px;
-    background: url(../images/addSongToSongList.png);
+    background: url(../img/vectorgraph/addSongToSongList.png);
     background-repeat: no-repeat;
     background-size: 100%;
 }
@@ -771,7 +825,7 @@ body,html{
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 0 15px #666;
-    overflow-y: none;
+    /*overflow-y: none;*/
     overflow-x: auto;
 }
 .addSongList_showDiv::-webkit-scrollbar{

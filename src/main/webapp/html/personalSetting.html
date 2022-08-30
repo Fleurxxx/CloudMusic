@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <title>个人资料设置</title>
+    <link rel="shortcut icon" href="../img/vectorgraph/icon.png" type="image/x-icon">
     <link href="../css/personalSetting.css" rel="stylesheet" type="text/css" />
     <script src="../js/jquery-3.2.1.js" type="text/javascript"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -53,7 +54,7 @@
             </tr>
         </table>
         <div class="userHeader_img_div">
-            <img id="userHeader_img" src="" alt="头像" width="100%" />
+            <img id="userHeader_img" src="../img/images/默认头像.png" alt="头像" width="100%" />
             <p id="updtate_img_p" onclick=javascrtpt:upphoto()>更换头像</p>
         </div>
         <span class="msg-userid" id="userid"></span>
@@ -109,7 +110,7 @@
     }
     //上传头像
     function upphoto() {
-        location.href="uploadPhoto.html";
+        location.href="uploadImg.html";
     }
     //提交
     function settingbt() {

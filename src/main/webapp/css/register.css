@@ -31,15 +31,20 @@ body{
 
 .register-box{
     width: 360px;
+    overflow: scroll;
+    overflow-x:auto;
+    overflow-y:auto;
     background: #f1f1f1;
     background:rgba(255,255,255,33);
-    height: 600px;
+    height: 680px;
     padding: 50px 40px;
     border-radius: 20px;
     position: absolute;
     left: 36%;
     top: 50%;
     transform: translate(-50%, -50%);
+    overflow-y: hidden;
+    overflow-x: auto;
 }
 
 .register-box h2{

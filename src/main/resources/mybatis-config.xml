@@ -17,5 +17,8 @@
 <!--    每一个Mapper.xml都需要在Mybatis核心配置文件中注册-->
     <mappers>
         <mapper resource="UserMapper.xml"/>
+        <mapper resource="SearchMapper.xml"/>
+        <mapper resource="SongMapper.xml"/>
+        <mapper resource="CommentMapper.xml"/>
     </mappers>
 </configuration>

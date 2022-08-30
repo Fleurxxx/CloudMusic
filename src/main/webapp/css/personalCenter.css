@@ -3,11 +3,11 @@ body{
 }
 .personalCenter_content{
     width: 1000px;
-    height: auto;
+    height: 100vh;
     border-left: 1px solid #696969;
     border-right: 1px solid #696969;
     margin: 0 auto;
-    padding-top:40px;
+    padding-top:110px;
     padding-bottom: 80px;
 }
 
@@ -86,26 +86,46 @@ body{
     text-align:left;
 }
 
+
 /*中间部分，用户听歌记录*/
-.listenSong_top{
+.listenSong_top,.personal-user-list{
     width: 900px;
     height: auto;
     margin: 0 auto;
     margin-top:30px;
 }
-.listensong_title{
+.listensong_title,.user-list-title{
     margin: 0;
     padding-bottom: 20px;
     border-bottom: 3px solid #C20C0C;
 }
 .listensong_table{
     width: 900px;
-    background: red;
     height: auto;
-    background: red;
+    max-width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: center;
 }
-.listensong_table tr{
+.listensong_table>tbody>tr{
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: center;
+    background-color: rgba(111, 96, 96, 0.27);
+}
+.listensong_table th{
     height: 35px;
+    padding: 8px;
+    line-height: 1.42857143;
+    text-align: center;
+    background-color: rgba(111, 96, 96, 0.27);
+}
+.listensong-table-tr th{
+    padding: 8px;
+    line-height: 1.42857143;
+    text-align: center;
+    background-color: rgba(111, 96, 96, 0.27);
 }
 .listensong_table tr:hover{
     background: #E2E2E2!important;
@@ -191,7 +211,7 @@ body{
     display: none;
     width: 20px;
     height: 20px;
-    background: url(../images/addSongToSongList.png);
+    /*background: url(../images/addSongToSongList.png);*/
     background-repeat: no-repeat;
     background-size: 100%;
 }
@@ -213,7 +233,7 @@ body{
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 0 15px #666;
-    overflow-y: none;
+    /*overflow-y: none;*/
     overflow-x: auto;
 }
 .addSongList_showDiv::-webkit-scrollbar{
@@ -270,4 +290,92 @@ body{
 .playSongBtn:hover{
     cursor: pointer;
     background: #1E90FF;
+}
+
+/*粉丝/关注列表*/
+.user-list{
+    width: 100%;
+    /*display: none;*/
+    margin-top:30px;
+    position: relative;
+    background-color: white;
+}
+.user-list-item-box{
+    width: 100%;
+    height: 75px;
+    /*border: black solid 2px;*/
+}
+.user-list-item-box:hover{
+    background-color: #f2f2f2;
+}
+.user-list-item-content{
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+.user-list-head-box{
+    height: 60px;
+    width: 60px;
+    margin-top: 5px;
+    margin-left: 25px;
+}
+.user-list-head-img{
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    box-shadow: rgb(0 0 0) 1px 1px 12px 1px;
+}
+.user-list-info-box{
+    height: 100%;
+    width: 200px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.user-list-info-name{
+    width: 200px;
+    height: 40px;
+    padding-top: 8px;
+    padding-left: 5px;
+    font-weight: bold;
+    font-size: large;
+}
+.user-list-info-detail{
+    width: 150px;
+    height: 30px;
+    font-size: 14px;
+    margin-left: 7px;
+    font-weight: bold;
+}
+.user-list-type-box{
+    height: 35px;
+    width: 70px;
+    margin-top: 20px;
+    justify-content: center;
+}
+.user_type{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    border:none;
+    color: white;
+    margin-left: 300px;
+    background-color: #db0707;
+}
+.user_typeac{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    border:none;
+    margin-left: 300px;
+    color: #363433;
+    background-color: #c0c0c0;
+}
+.user-list-info-fans-box{
+    height: 35px;
+    width: 70px;
+    margin-top: 27px;
+    font-size: 14px;
+    margin-left: 400px;
+    justify-content: flex-end;
 }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Register</title>
     <link rel="stylesheet" type="text/css" href="../css/register.css"/>
+    <link rel="shortcut icon" href="../img/vectorgraph/icon.png" type="image/x-icon">
     <script src="../js/jquery-3.2.1.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript"></script>
@@ -45,7 +46,7 @@
             <a href="https://st.music.163.com/official-terms/privacy" target="_blank">《隐私政策》</a>
             <a href="https://st.music.163.com/official-terms/children" target="_blank">《儿童隐私政策》</a>
         </div>
-        <input class="input-button" type="submit" id="but" name="but" disabled="true" value="注册">
+        <input class="input-button" type="button" id="but" name="but" disabled="true" value="注册">
         <div class="sign-up">
             已有账户！   <a href="login.html">立即登录</a>
         </div>
@@ -242,6 +243,7 @@
                 console.log(response);
                 alert(response.data.message);
                 if(response.data.code===200) {
+                    location.href="login.html";
                     clearInterval(interval);
                     let s_username = document.getElementById("s_username");
                     s_username.innerHTML = "";

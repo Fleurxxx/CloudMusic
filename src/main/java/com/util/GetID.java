@@ -2,6 +2,8 @@ package com.util;
 
 //雪花算法
 
+import org.junit.jupiter.api.Test;
+
 public class GetID {
 
     public GetID(){}
@@ -128,6 +130,7 @@ public class GetID {
     //==============================Test=============================================
     /** 测试
      * @return */
+
     public String getid() {
         GetID idWorker = new GetID(0, 0);
         //for (int i = 0; i < 1000; i++) {

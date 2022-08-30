@@ -3,10 +3,12 @@ package com.dao.impl;
 
 import com.dao.BaseDao;
 import com.dao.UserDao;
+import com.entity.Fans;
 import com.entity.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -107,13 +109,81 @@ public class UserDaoImpl extends  BaseDao implements UserDao {
     }
 
     @Override
+    public int updateHeaderImg(User user) {
+        return 0;
+    }
+
+
+    @Override
     public int deleteUser(User user) {
         return 0;
     }
 
     @Override
+    public boolean selectConcernState(Fans fans) {
+        return false;
+    }
+
+
+    @Override
+    public int updateConcernAC(Integer focusid, Integer userid) {
+        return 0;
+    }
+
+    @Override
+    public int updateConcernACC(Integer focusid, Integer userid) {
+        return 0;
+    }
+
+    @Override
+    public int updateConcernWA(Integer focusid, Integer userid) {
+        return 0;
+    }
+
+    @Override
+    public List<Fans> selectConcernList(Integer userid) {
+        return null;
+    }
+
+    @Override
+    public List<Fans> selectFansList(Integer userid) {
+        return null;
+    }
+
+
+    @Override
+    public List<Fans> selectOtherConcernList(Integer userid) {
+        return null;
+    }
+
+    @Override
+    public List<Fans> selectOtherFansList(Integer userid) {
+        return null;
+    }
+
+    @Override
     public List<User> getUserLike(String value) {
         return null;
+    }
+
+    @Override
+    public ArrayList<User> selectAllUserInfo() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<User> selectAllSingerInfo() {
+        return null;
+    }
+
+    @Override
+    public int forbidAccount(User user) {
+        return 0;
+    }
+
+    @Override
+    public int unserAccount(User user) {
+        return 0;
     }
 
     @Override

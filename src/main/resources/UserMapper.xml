@@ -4,6 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--namespace=绑定一个指定的dao/mapper接口-->
 <mapper namespace="com.dao.UserDao">
+
+
     <!--select查询语句-->
     <select id="getUserList" resultType="com.entity.User">
          select * from test_nc.user
@@ -46,13 +48,13 @@
     </select>
     <!--    修改密码   -->
     <insert id="updatePwd" parameterType="com.entity.User">
-        update test_nc.user set password=#{password} where user_id=#{user_id};
+        update test_nc.user set password=#{password} where email=#{email};
     </insert>
     <!--    根据id查询用户信息   -->
     <select id="getUserById" parameterType="int" resultType="com.entity.User">
         select *,
-        (select count(*) from test_nc.fans where fans_focusid=#{user_id} and fans_type=1) as num_focus,
-        (select count(*)from test_nc.fans where fans_id=#{user_id} and fans_type=1) as num_fans
+        (select count(*) from test_nc.fans where fans_focusid=#{user_id} and fans_type=1) as num_fans,
+        (select count(*)from test_nc.fans where fans_id=#{user_id} and fans_type=1) as num_focus
         from test_nc.user
         <where>
             <if test="user_id!=null">
@@ -60,8 +62,78 @@
             </if>
         </where>
     </select>
+    <!--    上传头像   -->
+    <insert id="updateHeaderImg" parameterType="com.entity.User">
+        update test_nc.user set user_photo=#{user_photo} where user_id=#{user_id};
+    </insert>
     <!--    修改个人资料   -->
     <insert id="updateUser" parameterType="com.entity.User">
         update test_nc.user set user_name=#{user_name},user_gender=#{user_gender},user_birth=#{user_birth},user_phone=#{user_phone},user_detail=#{user_detail} where user_id=#{user_id};
+    </insert>
+
+    <!--  查询，判断是否关注过 -->
+    <select id="selectConcernState" parameterType="com.entity.Fans" resultType="boolean">
+        <![CDATA[ select count(1) from test_nc.fans where fans_id=#{fans_id} and fans_focusid=#{fans_focusid}]]>
+    </select>
+    <!--    添加关注状态（关注）   -->
+    <insert id="updateConcernAC" parameterType="com.entity.Fans">
+        insert into test_nc.fans(fans_id,fans_focusid,fans_name,fans_photo,fans_foname,fans_fophoto,fans_type,fans_detail,fans_fdetail)
+        values (#{userid},#{focusid},(select user_name from test_nc.user where user_id=#{userid}),(select user_photo from test_nc.user where user_id=#{userid}),(select user_name from test_nc.user where user_id=#{focusid}),(select user_photo from test_nc.user where user_id=#{focusid}),1,(select user_detail from test_nc.user where user_id=#{userid}),(select user_detail from test_nc.user where user_id=#{focusid}));
+    </insert>
+    <!--  修改关注状态（关注） -->
+    <insert id="updateConcernACC" parameterType="com.entity.Fans">
+        update test_nc.fans set fans_type=1 where fans_id=#{userid} and fans_focusid=#{focusid};
+    </insert>
+    <!--  修改关注状态（取消关注） -->
+    <insert id="updateConcernWA" parameterType="com.entity.Fans">
+        update test_nc.fans set fans_type=0 where fans_id=#{userid} and fans_focusid=#{focusid};
+    </insert>
+
+    <!--  查找关注列表  -->
+    <select id="selectConcernList" resultType="com.entity.Fans">
+        select fans_focusid,fans_foname,fans_fophoto,fans_fdetail
+        from test_nc.fans
+        where fans_id=#{userid} and fans_type=1;
+    </select>
+
+    <!--  查找粉丝列表  -->
+    <select id="selectFansList" resultType="com.entity.Fans">
+        select fans_id,fans_name,fans_photo,fans_detail
+        from test_nc.fans
+        where fans_focusid=#{userid} and fans_type=1;
+    </select>
+
+    <!--  查找他人关注列表  -->
+    <select id="selectOtherConcernList" resultType="com.entity.Fans">
+        select fans_focusid,fans_foname,fans_fophoto
+        from test_nc.fans
+        where fans_id=#{userid} and fans_type=1;
+    </select>
+
+    <!--  查找他人粉丝列表  -->
+    <select id="selectOtherFansList" resultType="com.entity.Fans">
+        select fans_id,fans_name,fans_photo
+        from test_nc.fans
+        where fans_focusid=#{userid} and fans_type=1;
+    </select>
+
+    <!--  所有用户信息  -->
+    <select id="selectAllUserInfo" resultType="com.entity.User">
+        select * from test_nc.user where user_type=0 or user_type=1;
+    </select>
+
+    <!--  所有歌手信息  -->
+    <select id="selectAllSingerInfo" resultType="com.entity.User">
+        select * from test_nc.user where user_type=2;
+    </select>
+
+    <!--  封号 -->
+    <insert id="forbidAccount" parameterType="com.entity.User">
+        update test_nc.user set user_state=1 where user_id=#{user_id};
+    </insert>
+
+    <!--  解封 -->
+    <insert id="unserAccount" parameterType="com.entity.User">
+        update test_nc.user set user_state=0 where user_id=#{user_id};
     </insert>
 </mapper>

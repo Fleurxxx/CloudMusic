@@ -3,11 +3,47 @@ package com.entity;
 public class Fans {
 
     private int fans_id;
-    private int fans_name;
+    private String fans_name;
     private String fans_photo;
     private int fans_focusid;
+    private String fans_foname;
+    private String fans_fophoto;
     private int fans_type;
 
+    private String fans_detail;//粉丝简介
+    private String fans_fdetail;//被关注者简介
+
+    public String getFans_detail() {
+        return fans_detail;
+    }
+
+    public void setFans_detail(String fans_detail) {
+        this.fans_detail = fans_detail;
+    }
+
+    public String getFans_fdetail() {
+        return fans_fdetail;
+    }
+
+    public void setFans_fdetail(String fans_fdetail) {
+        this.fans_fdetail = fans_fdetail;
+    }
+
+    public String getFans_foname() {
+        return fans_foname;
+    }
+
+    public void setFans_foname(String fans_foname) {
+        this.fans_foname = fans_foname;
+    }
+
+    public String getFans_fophoto() {
+        return fans_fophoto;
+    }
+
+    public void setFans_fophoto(String fans_fophoto) {
+        this.fans_fophoto = fans_fophoto;
+    }
 
     public int getFans_id() {
         return fans_id;
@@ -41,11 +77,11 @@ public class Fans {
         this.fans_photo = fans_photo;
     }
 
-    public int getFans_name() {
+    public String getFans_name() {
         return fans_name;
     }
 
-    public void setFans_name(int fans_name) {
+    public void setFans_name(String fans_name) {
         this.fans_name = fans_name;
     }
 

@@ -2,6 +2,7 @@ package com.service.impl;
 
 import com.dao.UserDao;
 import com.dao.impl.UserDaoImpl;
+import com.entity.Fans;
 import com.entity.User;
 import com.service.UserService;
 import com.util.MybatisUtils;
@@ -10,12 +11,16 @@ import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
     private UserDao pd = new UserDaoImpl();
+    //1.获取sqlSession对象
     SqlSession sqlSession = MybatisUtils.getSqlSession();
+    //2.获取Mapper接口的代理对象
     UserDao mapper = sqlSession.getMapper(UserDao.class);
+
     @Override
     public boolean login(String an, String pwd) {
         return pd.login(an,pwd);
@@ -78,6 +83,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updatePwd(User user) {
+        //3.执行方法
         int res = mapper.updatePwd(user);
         boolean flag;
         if(res>0){
@@ -85,7 +91,10 @@ public class UserServiceImpl implements UserService {
         }else{
             flag = false;
         }
+        System.out.println(flag);
+        //4.提交事务
         sqlSession.commit();
+        //5.释放资源
         sqlSession.close();
         return flag;
     }
@@ -105,13 +114,147 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateHeaderImg(String headSculptureUrl, int userId) {
-        return false;
+    public boolean updateHeaderImg(User user) {
+        int res = mapper.updateHeaderImg(user);
+        boolean flag;
+        if(res>0){
+            flag = true;
+        }else{
+            flag = false;
+        }
+        sqlSession.commit();
+        sqlSession.close();
+        return flag;
     }
 
     @Override
+    public boolean selectConcernState(Fans fans) {
+        boolean flag;
+        if(mapper.selectConcernState(fans)){
+            flag=true;
+        }else{
+            flag=false;
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean updateConcernAC(Integer focusid, Integer userid) {
+        int res = mapper.updateConcernAC(focusid,userid);
+        boolean flag;
+        if(res>0){
+            flag = true;
+        }else{
+            flag = false;
+        }
+        sqlSession.commit();
+        sqlSession.close();
+        return flag;
+    }
+
+    @Override
+    public boolean updateConcernACC(Integer focusid, Integer userid) {
+        int res = mapper.updateConcernACC(focusid,userid);
+        boolean flag;
+        if(res>0){
+            flag = true;
+        }else{
+            flag = false;
+        }
+        sqlSession.commit();
+        sqlSession.close();
+        return flag;
+    }
+
+    @Override
+    public boolean updateConcernWA(Integer focusid, Integer userid) {
+        int res = mapper.updateConcernWA(focusid,userid);
+        boolean flag;
+        if(res>0){
+            flag = true;
+        }else{
+            flag = false;
+        }
+        sqlSession.commit();
+        sqlSession.close();
+        return flag;
+    }
+
+    @Override
+    public List<Fans> selectConcernList(Integer userid) {
+        List<Fans> list = mapper.selectConcernList(userid);
+        sqlSession.commit();
+        sqlSession.close();
+        return list;
+    }
+
+    @Override
+    public List<Fans> selectFansList(Integer userid) {
+        List<Fans> list = mapper.selectFansList(userid);
+        sqlSession.commit();
+        sqlSession.close();
+        return list;
+    }
+
+    @Override
+    public List<Fans> selectOtherConcernList(Integer userid) {
+        List<Fans> list = mapper.selectFansList(userid);
+        sqlSession.commit();
+        sqlSession.close();
+        return list;
+    }
+
+    @Override
+    public List<Fans> selectOtherFansList(Integer userid) {
+        List<Fans> list = mapper.selectFansList(userid);
+        sqlSession.commit();
+        sqlSession.close();
+        return list;
+    }
+
+
+    @Override
     public ArrayList<User> selectAllUserInfo() {
-        return null;
+        ArrayList<User> list = mapper.selectAllUserInfo();
+        sqlSession.commit();
+        sqlSession.close();
+        return list;
+    }
+
+    @Override
+    public ArrayList<User> selectAllSingerInfo() {
+        ArrayList<User> list = mapper.selectAllSingerInfo();
+        sqlSession.commit();
+        sqlSession.close();
+        return list;
+    }
+
+    @Override
+    public boolean forbidAccount(User user) {
+        int res = mapper.forbidAccount(user);
+        boolean flag;
+        if(res>0){
+            flag = true;
+        }else{
+            flag = false;
+        }
+        sqlSession.commit();
+        sqlSession.close();
+        return flag;
+    }
+
+    @Override
+    public boolean unserAccount(User user) {
+        int res = mapper.unserAccount(user);
+        boolean flag;
+        if(res>0){
+            flag = true;
+        }else{
+            flag = false;
+        }
+        sqlSession.commit();
+        sqlSession.close();
+        return flag;
     }
 
     @Override

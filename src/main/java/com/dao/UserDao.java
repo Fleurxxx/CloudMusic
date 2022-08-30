@@ -1,8 +1,11 @@
 package com.dao;
 
+import com.entity.Fans;
 import com.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 import javax.jws.soap.SOAPBinding;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,14 +66,53 @@ public interface UserDao {
     //修改密码
     int updatePwd(User user);
 
+    //上传头像
+    int updateHeaderImg(User user);
+
     //修改用户信息
     int updateUser(User user);
 
     //删除用户信息
     int deleteUser(User user);
 
+    //查询，判断是否关注过
+    boolean selectConcernState(Fans fans);
+
+    //添加（关注状态）关注
+    int updateConcernAC(@Param("focusid") Integer focusid,@Param("userid") Integer userid);
+
+    //添加（关注状态）关注
+    int updateConcernACC(@Param("focusid") Integer focusid,@Param("userid") Integer userid);
+
+    //修改（关注状态）取消关注
+    int updateConcernWA(@Param("focusid") Integer focusid,@Param("userid") Integer userid);
+
+    //根据用户id查询关注列表
+    List<Fans> selectConcernList(Integer userid);//userid是粉丝id
+
+    //根据用户id查询粉丝列表
+    List<Fans> selectFansList(Integer userid);//userid是被关注者id
+
+    //根据他人用户id查询他人关注列表
+    List<Fans> selectOtherConcernList(Integer userid);
+
+    //根他人据用户id查询他人粉丝列表
+    List<Fans> selectOtherFansList(Integer userid);
+
     //模糊搜索
     List<User> getUserLike(String value);
+
+    //无条件查询用户
+    ArrayList<User> selectAllUserInfo();
+
+    //无条件查询歌手
+    ArrayList<User> selectAllSingerInfo();
+
+    //封号
+    int forbidAccount(User user);
+
+    //封号
+    int unserAccount(User user);
 
     //查询用户名字
     String getUsername(String name);
