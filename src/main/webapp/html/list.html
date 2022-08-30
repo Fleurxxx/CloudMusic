@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<!-- 网页使用的语言 -->
+<html lang="zh-CN">
+<head>
+    <!-- 指定字符集 -->
+    <meta charset="utf-8">
+    <!-- 使用Edge最新的浏览器的渲染方式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- viewport视口：网页可以根据设置的宽度自动进行适配，在浏览器的内部虚拟一个容器，容器的宽度与设备的宽度相同。
+    width: 默认宽度与设备的宽度相同
+    initial-scale: 初始的缩放比，为1:1 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <title>音乐管理页</title>
+    <link rel="stylesheet" type="text/css" href="../css/list.css">
+    <link rel="shortcut icon" href="../img/vectorgraph/icon.png" type="image/x-icon">
+    <!-- 1. 导入CSS的全局样式 -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- 2. jQuery导入，建议使用1.9以上的版本 -->
+    <script src="../js/jquery-3.2.1.js" type="text/javascript"></script>
+    <!-- 3. 导入bootstrap的js文件 -->
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+<!--class="container"-->
+<div class="list-box">
+    <header class="list-header">
+        <div class="LOGO">
+            <img class="LOGO" src = "../img/images/logo.png" align="center"> <span>网易云音乐</span>
+        </div>
+    </header>
+    <div class="list-row list-pre-scrollable">
+        <h2 style="text-align: center;margin-top: 100px;font-weight:bolder;">我的音乐管理</h2>
+        <div class="container" style="overflow-y:auto;">
+            <div style="float: left;">
+<!--                <form class="form-inline">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="exampleInputName2">歌曲名</label>-->
+<!--                        <input name="name" type="text" class="form-control" id="exampleInputName2" >-->
+<!--                    </div>-->
+<!--                    <button id="submit1" type="button" class="btn btn-default">查询</button>-->
+<!--                </form>-->
+                <div class="user-song-but">
+                    <button class="btn btn-primary" onclick=javascrtpt:beforlist()>上一页</button>
+                    <span class="pagenum"></span>
+                    <button class="btn btn-primary" onclick=javascrtpt:nextlist()>下一页</button>
+                </div>
+                <div class="love-song-but">
+                    <button class="btn btn-primary" onclick=javascrtpt:beforlovelist()>上一页</button>
+                    <span class="love-pagenum"></span>
+                    <button class="btn btn-primary" onclick=javascrtpt:nextlovelist()>下一页</button>
+                </div>
+            </div>
+            <div class="list-btn-box" >
+                <button class="btn btn-primary" target="main" href="#" onclick=javascrtpt:myselfsong()>我的音乐</button>
+                <button class="btn btn-primary" target="main" href="#" onclick=javascrtpt:lovesong()>喜欢列表</button>
+                <a class="btn btn-primary"  href="uploadMusic.html">添加歌曲</a>
+<!--                <a id="delete"  class="btn btn-primary" onclick=javascrtpt:deletesong()>删除选中</a>-->
+            </div>
+            <div class="list-mine-box">
+                <table border="1" class="table table-bordered table-hover" >
+                    <tr class="success">
+                        <th>选择</th>
+                        <th>封面</th>
+                        <th>歌名</th>
+                        <th>歌手</th>
+                        <th>歌词</th>
+                        <th>歌曲</th>
+                        <th>操作</th>
+                    </tr>
+                    <tbody id="info" valign="middle">
+                    </tbody>
+                </table>
+                <div class="list-song-box">
+                    <nav aria-label="Page navigation">
+                        <ul id="all" class="pagination">
+                        </ul>
+                    </nav>
+                </div>
+                <div class="container">
+                    <ul class="pagination"></ul>
+                </div>
+            </div>
+            <div class="list-like-box">
+                <table border="1" class="table table-bordered table-hover" >
+                    <tr class="success">
+                        <th>选择</th>
+                        <th>封面</th>
+                        <th>歌名</th>
+                        <th>歌手</th>
+                        <th>歌曲</th>
+                        <th>操作</th>
+                    </tr>
+                    <tbody id="info1" valign="middle">
+                    </tbody>
+                </table>
+                <div class="list-song-box">
+                    <nav aria-label="Page navigation">
+                        <ul id="all1" class="pagination">
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script type="text/javascript">
+    let cnt = 0,ans=0,sumpage;
+    $(".list-like-box").css("display","none");
+    $(function () {
+        $(".user-song-but").css("display","block");
+        $(".love-song-but").css("display","none");
+        {
+            axios({
+                url: "http://localhost:8080/songServlet?method=findMusic",
+                method:"POST",
+                dataType: "json",
+                contentType:"application/x-www-form-urlencoded",//method为post时必须加上这个,否则接收不到参数
+                data: {
+                    page: cnt,  // 当前页数
+                    listRows: 5,  // 每页显示的数据数量
+                },
+            }).then(function (response) {
+                // console.log(response);
+                if(response.data.code===200) {//验证成功显示个人信息
+                    let data = response['data']['data'];
+                    console.log(data.length);
+                    console.log(data);
+                    let str,src1,lovetxt,datath;
+                    let s = "";
+                    sumpage = data.length;
+                    if(data.length<5){
+                        datath = data.length;
+                    }else{
+                        datath = 5;
+                    }
+                    for (let i = 0; i < datath; i++) {
+                        console.log(data[i]["song_id"]);
+                        if(data[i]["lyric_path"]==null){
+                            str = "已上传";
+                        }else{
+                            str = "已上传";
+                        }
+                        if(data[i]["photo_path"]==null){
+                            src1 = "../img/vectorgraph/图图.png";
+                        }else{
+                            src1 = data[i]["photo_path"];
+                        }
+                        console.log("喜欢状态："+data[i]["conn"]);
+                        if(data[i]["conn"]==="1"){
+                            lovetxt="取消喜欢";
+                        }else{
+                            lovetxt="喜欢";
+                        }
+                        s += "<tr>";
+                        s += "<th> <input id=\"" + data[i]["song_id"] + "\" type=\"checkbox\"> </th>";
+                        s += "<td> <img src=\""+ src1 + "\"  style='height: 50px'></td>";
+                        s += "<td>" + data[i]["song_name"] + "</td>";
+                        s += "<td>" + data[i]["song_singername"] + "</td>";
+                        s += "<td>" + str + "</td>";
+                        s += "<td <a href=\"\">  <audio src= \"" + data[i]["song_path"] + "\"  + controls=\"controls\" preload=\"auto\" loop=\"loop\">  >" + "</audio> </a> </td>";
+                        s += "<td > <button class='btn btn-default btn-sm' onclick=\"deleteInfo(" + data[i]["song_id"]+ ")\" > 删除</button> " +
+                            "<input type='button'  class='btn btn-default btn-sm' value=\""+lovetxt+"\" onclick=\"loveInfo(" + data[i]["song_id"]+" ,"+ data[i]["conn"] + ")\" > </inpbutton>" +
+                            // "<button class='btn btn-default btn-sm' onclick=\"updateInfo(" + data[i]["song_id"] + ")\" > 修改</button>" +
+                            "</td>";
+                        s += "</tr>";
+                    }
+                    $("#info").html(s);
+                    $(".pagenum").html(cnt+1);
+                    var audios = document.getElementsByTagName("audio");
+
+                    // 暂停函数
+                    function pauseAll() {
+                        var self = this;
+                        [].forEach.call(audios, function (i) {
+                            // 将audios中其他的audio全部暂停
+                            i !== self && i.pause();
+                        })
+                    }
+
+                    // 给play事件绑定暂停函数
+                    [].forEach.call(audios, function (i) {
+                        i.addEventListener("play", pauseAll.bind(i));
+                    });
+                }
+            })
+        }
+    });
+
+    //我自己的音乐
+    function myselfsong(cnt1){
+        $(".user-song-but").css("display","block");
+        $(".love-song-but").css("display","none");
+        if(cnt1==null){
+            cnt1 = cnt;
+        }
+        console.log(cnt1);
+        let rows = 5;
+        $(".list-mine-box").css("display","block");
+        $(".list-like-box").css("display","none");
+        axios({
+            url: "http://localhost:8080/songServlet?method=findMusic",
+            method:"POST",
+            dataType: "json",
+            contentType:"application/x-www-form-urlencoded",//method为post时必须加上这个,否则接收不到参数
+            data: {
+                page: cnt1,  // 当前页数
+                listRows: rows,  // 每页显示的数据数量
+            }
+        }).then(function (response) {
+            // console.log(response);
+            if(response.data.code===200) {//验证成功显示个人信息
+                let data = response['data']['data'];
+                console.log(data.length);
+                console.log(data);
+                let str,src1,lovetxt;
+                let s = "";
+                for (let i = 0; i < data.length; i++) {
+                    if(data[i]["lyric_path"]==null){
+                        str = "已上传";
+                    }else{
+                        str = "已上传";
+                    }
+                    console.log(data[i]["photo_path"]);
+                    if(data[i]["photo_path"]==null){
+                        src1 = "../img/vectorgraph/图图.png";
+                    }else{
+                        src1 = data[i]["photo_path"];
+                    }
+                    if(data[i]["conn"]==="1"){
+                        lovetxt="取消喜欢";
+                    }else{
+                        lovetxt="喜欢";
+                    }
+                    s += "<tr>";
+                    s += "<th> <input id=\"" + data[i]["song_id"] + "\" type=\"checkbox\"> </th>";
+                    s += "<td> <img src=\""+ src1 + "\"  style='height: 50px'></td>";
+                    s += "<td>" + data[i]["song_name"] + "</td>";
+                    s += "<td>" + data[i]["song_singername"] + "</td>";
+                    s += "<td>" + str + "</td>";
+                    s += "<td <a href=\"\">  <audio src= \"" + data[i]["song_path"] + "\"  + controls=\"controls\" preload=\"auto\" loop=\"loop\">  >" + "</audio> </a> </td>";
+                    s += "<td > <button class='btn btn-default btn-sm' onclick=\"deleteInfo(" + data[i]["song_id"]+ ")\" > 删除</button> " +
+                        "<input type='button'  class='btn btn-default btn-sm' value=\""+lovetxt+"\" onclick=\"loveInfo(" + data[i]["song_id"]+" ,"+ data[i]["conn"] + ")\" > </inpbutton>" +
+                        // "<button class='btn btn-default btn-sm' onclick=\"updateInfo(" + data[i]["song_id"] + ")\" > 修改</button>" +
+                        "</td>";
+                    s += "</tr>";
+                }
+                $("#info").html(s);
+                $(".pagenum").html(cnt+1);
+                var audios = document.getElementsByTagName("audio");
+
+                // 暂停函数
+                function pauseAll() {
+                    var self = this;
+                    [].forEach.call(audios, function (i) {
+                        // 将audios中其他的audio全部暂停
+                        i !== self && i.pause();
+                    })
+                }
+
+                // 给play事件绑定暂停函数
+                [].forEach.call(audios, function (i) {
+                    i.addEventListener("play", pauseAll.bind(i));
+                });
+            }
+        })
+    }
+
+    //获取喜欢歌曲列表
+    function lovesong(cnt1){
+        let rows = 5;
+        $(".love-song-but").css("display","block");
+        $(".user-song-but").css("display","none");
+
+        $(".list-mine-box").css("display","block");
+        $(".list-like-box").css("display","none");
+        axios({
+            url: "http://localhost:8080/songServlet?method=findLoveMusic",
+            method:"POST",
+            contentType:"application/x-www-form-urlencoded",//method为post时必须加上这个,否则接收不到参数
+            dataType: "json",
+            data: {
+                page: cnt1,  // 当前页数
+                listRows: rows,  // 每页显示的数据数量
+            }
+        }).then(function (response) {
+            console.log(response);
+            if(response.data.code===200) {//验证成功显示个人信息
+                let data = response['data']['data'];
+                console.log(data.length);
+                console.log(data);
+                let str,src1;
+                let s = "";
+                for (let i = 0; i < data.length; i++) {
+                    if(data[i]["song_singername"]==null || data[i]["song_singername"]==""){
+                        str = "已上传";
+                    }else{
+                        str = "未上传";
+                    }
+                    if(data[i]["photo_path"]==null){
+                        src1 = "../img/vectorgraph/图图.png";
+                    }else{
+                        src1 = data[i]["photo_path"];
+                    }
+                    s += "<tr>";
+                    s += "<th> <input id=\"" + data[i]["song_id"] + "\" type=\"checkbox\"> </th>";
+                    s += "<td> <img src=\""+ src1 + "\"  style='height: 50px'></td>";
+                    s += "<td>" + data[i]["song_name"] + "</td>";
+                    s += "<td>" + data[i]["song_singername"] + "</td>";
+                    s += "<td>" + str + "</td>";
+                    s += "<td <a href=\"\">  <audio src= \"" + data[i]["song_path"] + "\"  + controls=\"controls\" preload=\"auto\" loop=\"loop\">  >" + "</audio> </a> </td>";
+                    s += "<td > <button class='btn btn-default btn-sm' onclick=\"centernLoveInfo(" + data[i]["song_id"] + ")\" > 取消喜欢</button>" +
+                        "</td>";
+                    s += "</tr>";
+                }
+                $("#info").html(s);
+                $(".love-pagenum").html(ans+1);
+                var audios = document.getElementsByTagName("audio");
+
+                // 暂停函数
+                function pauseAll() {
+                    var self = this;
+                    [].forEach.call(audios, function (i) {
+                        // 将audios中其他的audio全部暂停
+                        i !== self && i.pause();
+                    })
+                }
+
+                // 给play事件绑定暂停函数
+                [].forEach.call(audios, function (i) {
+                    i.addEventListener("play", pauseAll.bind(i));
+                });
+            }
+        })
+    }
+
+    function deletesong(){
+        window.location.href="login.html";
+    }
+
+
+    //喜欢歌曲
+    function loveInfo(obj,txt) {
+        console.log(txt);
+        let songid = obj.toString();
+        console.log(typeof txt);
+        if(txt===1){//已经喜欢了，需要取消喜欢
+            axios({
+                method:'POST',
+                dataType:"json",
+                url:'http://localhost:8080/songServlet?method=cancelLoveSong',
+                data: {
+                    song_id: songid
+                }
+            }).then(function (response) {
+                console.log(response);
+                // alert(response.data.message);
+                if(response.data.code===200)
+                {
+                    console.log("取消喜欢成功");
+                    myselfsong();
+                    // location.reload(true);
+                }else{
+                    console.log("操作失败，仍喜欢");
+                }
+            });
+        }else{ //未喜欢，需要喜欢
+            axios({
+                method:'POST',
+                dataType:"json",
+                url:'http://localhost:8080/songServlet?method=loveSong',
+                data: {
+                    song_id: songid
+                }
+            }).then(function (response) {
+                console.log(response);
+                // alert(response.data.message);
+                if(response.data.code===200)
+                {
+                    console.log("喜欢成功");
+                    myselfsong();
+                    // location.reload(true);
+                }else{
+                    console.log("加入喜欢的列表失败或者已经存在该音乐");
+                }
+            });
+        }
+    }
+
+    function centernLoveInfo(obj) {
+        let songid = obj.toString();
+        axios({
+            method:'POST',
+            dataType:"json",
+            url:'http://localhost:8080/songServlet?method=cancelLoveSong',
+            data: {
+                song_id: songid
+            }
+        }).then(function (response) {
+            console.log(response);
+            alert(response.data.message);
+            if(response.data.code===200)
+            {
+                console.log("取消喜欢成功");
+                // location.reload(true);
+                lovesong();
+            }else{
+                console.log("操作失败，仍喜欢");
+            }
+        });
+    }
+
+
+    function deleteInfo(obj) {
+        console.log(obj);
+        let songid = obj.toString();
+        axios({
+            method:'POST',
+            dataType:"json",
+            url:'http://localhost:8080/songServlet?method=deleteSong',
+            data: {
+                song_id: songid
+            }
+        }).then(function (response) {
+            console.log(response);
+            alert(response.data.message);
+            if(response.data.code===200)
+            {
+                console.log("删除成功");
+                location.reload(true);
+            }else{
+                console.log("删除失败");
+            }
+        });
+    }
+
+
+    //上一页
+    function beforlist(){
+        cnt -= 1;
+        if(cnt<0){
+            cnt = 0;
+        }
+        console.log(cnt);
+        myselfsong(cnt);
+    }
+
+    //下一页
+    function nextlist(){
+        cnt += 1;
+        console.log(cnt);
+        myselfsong(cnt);
+    }
+
+    function beforlovelist(){
+        ans -= 1;
+        if(ans<0){
+            ans = 0;
+        }
+        console.log(ans);
+        myselfsong(ans);
+    }
+
+    function nextlovelist(){
+        ans += 1;
+        console.log(ans);
+        myselfsong(ans);
+    }
+
+
+</script>
+</body>
+</html>

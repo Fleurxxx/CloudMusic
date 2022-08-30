@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员界面</title>
+    <script src="../static/js/axios.js"></script>
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+<!--    <link rel="stylesheet" type="text/css" href="../css/11.css">-->
+    <link rel="shortcut icon" href="../static/imgs/cms.png" type="image/x-icon">
+    <script src="../static/js/jQuery.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body id="body-pd">
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #12192c;color: white;font-weight: bold">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">提示！！</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--侧边导航条-->
+<div class="l-navbar" id="navbar">
+    <nav class="nav">
+        <div>
+            <div class="nav_brand">
+                <!-- <ion-icon name="menu-outline" class="nav_toggle" id="nav_toggle"></ion-icon> -->
+                <ion-icon name="menu-outline" class="nav_toggle" id="nav-toggle"></ion-icon>
+
+                <a href="#" class="nav_logo">Hi！管理员</a>
+            </div>
+            <div class="nav_list">
+                <a href="#" class="nav_link" id="check_blog">
+                    <ion-icon name="chatbubbles-outline" class="nav_icon" ></ion-icon>
+                    <span class="nav_name side_title">博客审核</span>
+                </a>
+                <a href="#" class="nav_link" id="manage_blog">
+                    <ion-icon name="pie-chart-outline" class="nav_icon" ></ion-icon>
+                    <span class="nav_name side_title">管理博客</span>
+                </a>
+                <a href="#" class="nav_link" id="mange_user">
+                    <ion-icon name="settings-outline" class="nav_icon" ></ion-icon>
+                    <span class="nav_name side_title">管理用户</span>
+                </a>
+            </div>
+        </div>
+        <a href="#" class="nav_link out-page">
+            <ion-icon name="log-out-outline" class="nav_icon" ></ion-icon>
+            <span class="nav_name">退出登陆</span>
+        </a>
+    </nav>
+</div>
+
+<div class="main-page">
+    <!--博客审核-->
+    <div class="check_blog_box">
+        <h1 class="main-page-title">博客审核</h1>
+        <div class="check_blog_in_box">
+            <div class="check_blog_list">
+                <table class="table table-hover check_blog_table">
+                    <thead class="check_blog_title">
+                    <tr>
+                        <td>博客ID</td>
+                        <td>博客标题</td>
+                        <td>博客作者</td>
+                        <td>发布时间</td>
+                        <td>可进行的操作</td>
+                    </tr>
+                    </thead>
+                    <tr class="check_blog_item">
+                        <td class="check_blog_info">33</td>
+                        <td class="check_blog_info">Java入门</td>
+                        <td class="check_blog_info">作者名</td>
+                        <td class="check_blog_info">2022-08-05 :02:09:59</td>
+                        <td class="check_blog_operation">
+                            <button class="btn btn-primary">查看</button>
+                            <button class="btn btn-success">通过</button>
+                            <button class="btn btn-danger">不通过</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!--展示数据条数-->
+            <div class="show_not_check_count">
+                <span>共</span>
+                <span id="totalPage">12</span>
+                <span>页</span>
+                <span id="totalCount">41</span>
+                <span>条</span>
+            </div>
+            <!--分页器-->
+            <div class="paginator">
+                <ul class="paginator_ul">
+                    <li class="page_number">
+                        <button  class="page_btn">第一页</button>
+                    </li>
+                    <li class="page_number">
+                        <button  class="page_btn">上一页</button>
+                    </li>
+                    <li  class="page_number">
+                        <button class="page_btn current_page">1</button>
+                    </li>
+                    <li class="page_number">
+                        <button  class="page_btn">2</button>
+                    </li>
+                    <li class="page_number">
+                        <button  class="page_btn">3</button>
+                    </li>
+                    <li class="page_number">
+                        <button  class="page_btn">下一页</button>
+                    </li>
+                    <li class="page_number">
+                        <button  class="page_btn">最后一页</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--管理博客-->
+    <div class="mange_blog_box">
+        <h1 class="main-page-title">管理博客</h1>
+        <div class="manage_blog_box">
+            <div class="manage_blog_list">
+                <table class="table table-hover manage_blog_table">
+                    <thead class="manage_blog_title">
+                    <tr>
+                        <td>博客ID</td>
+                        <td>博客标题</td>
+                        <td>博客作者</td>
+                        <td>文章类型</td>
+                        <td>发布时间</td>
+                        <td>可进行的操作</td>
+                    </tr>
+                    </thead>
+                    <tr class="manage_blog_item">
+                        <td class="manage_blog_info">33</td>
+                        <td class="manage_blog_info">Java入门</td>
+                        <td class="manage_blog_info">作者名</td>
+                        <td class="manage_blog_info">原创</td>
+                        <td class="manage_blog_info">2022-08-05 :02:09:59</td>
+                        <td class="manage_blog_operation">
+                            <button class="btn btn-primary">查看</button>
+                            <button class="btn btn-danger">删除</button>
+                        </td>
+                    </tr>
+                    <tr class="manage_blog_item">
+                        <td class="manage_blog_info">33</td>
+                        <td class="manage_blog_info">Java入门</td>
+                        <td class="manage_blog_info">作者名</td>
+                        <td class="manage_blog_info">原创</td>
+                        <td class="manage_blog_info">2022-08-05 :02:09:59</td>
+                        <td class="manage_blog_operation">
+                            <button class="btn btn-primary">查看</button>
+                            <button class="btn btn-danger">删除</button>
+                        </td>
+                    </tr>
+                    <tr class="manage_blog_item">
+                        <td class="manage_blog_info">33</td>
+                        <td class="manage_blog_info">Java入门</td>
+                        <td class="manage_blog_info">作者名</td>
+                        <td class="manage_blog_info">原创</td>
+                        <td class="manage_blog_info">2022-08-05 :02:09:59</td>
+                        <td class="manage_blog_operation">
+                            <button class="btn btn-primary">查看</button>
+                            <button class="btn btn-danger">删除</button>
+                        </td>
+                    </tr>
+                    <tr class="manage_blog_item">
+                        <td class="manage_blog_info">33</td>
+                        <td class="manage_blog_info">Java入门</td>
+                        <td class="manage_blog_info">作者名</td>
+                        <td class="manage_blog_info">原创</td>
+                        <td class="manage_blog_info">2022-08-05 :02:09:59</td>
+                        <td class="manage_blog_operation">
+                            <button class="btn btn-primary">查看</button>
+                            <button class="btn btn-danger">删除</button>
+                        </td>
+                    </tr>
+                    <tr class="manage_blog_item">
+                        <td class="manage_blog_info">33</td>
+                        <td class="manage_blog_info">Java入门</td>
+                        <td class="manage_blog_info">作者名</td>
+                        <td class="manage_blog_info">原创</td>
+                        <td class="manage_blog_info">2022-08-05 :02:09:59</td>
+                        <td class="manage_blog_operation">
+                            <button class="btn btn-primary">查看</button>
+                            <button class="btn btn-danger">删除</button>
+                        </td>
+                    </tr>
+                    <tr class="manage_blog_item">
+                        <td class="manage_blog_info">33</td>
+                        <td class="manage_blog_info">Java入门</td>
+                        <td class="manage_blog_info">作者名</td>
+                        <td class="manage_blog_info">原创</td>
+                        <td class="manage_blog_info">2022-08-05 :02:09:59</td>
+                        <td class="manage_blog_operation">
+                            <button class="btn btn-primary">查看</button>
+                            <button class="btn btn-danger">删除</button>
+                        </td>
+                    </tr>
+                    <tr class="manage_blog_item">
+                        <td class="manage_blog_info">33</td>
+                        <td class="manage_blog_info">Java入门</td>
+                        <td class="manage_blog_info">作者名</td>
+                        <td class="manage_blog_info">原创</td>
+                        <td class="manage_blog_info">2022-08-05 :02:09:59</td>
+                        <td class="manage_blog_operation">
+                            <button class="btn btn-primary">查看</button>
+                            <button class="btn btn-danger">删除</button>
+                        </td>
+                    </tr>
+                    <tr class="manage_blog_item">
+                        <td class="manage_blog_info">33</td>
+                        <td class="manage_blog_info">Java入门</td>
+                        <td class="manage_blog_info">作者名</td>
+                        <td class="manage_blog_info">原创</td>
+                        <td class="manage_blog_info">2022-08-05 :02:09:59</td>
+                        <td class="manage_blog_operation">
+                            <button class="btn btn-primary">查看</button>
+                            <button class="btn btn-danger">删除</button>
+                        </td>
+                    </tr>
+                    <tr class="manage_blog_item">
+                        <td class="manage_blog_info">33</td>
+                        <td class="manage_blog_info">Java入门</td>
+                        <td class="manage_blog_info">作者名</td>
+                        <td class="manage_blog_info">原创</td>
+                        <td class="manage_blog_info">2022-08-05 :02:09:59</td>
+                        <td class="manage_blog_operation">
+                            <button class="btn btn-primary">查看</button>
+                            <button class="btn btn-danger">删除</button>
+                        </td>
+                    </tr>
+                    <tr class="manage_blog_item">
+                        <td class="manage_blog_info">33</td>
+                        <td class="manage_blog_info">Java入门</td>
+                        <td class="manage_blog_info">作者名</td>
+                        <td class="manage_blog_info">原创</td>
+                        <td class="manage_blog_info">2022-08-05 :02:09:59</td>
+                        <td class="manage_blog_operation">
+                            <button class="btn btn-primary">查看</button>
+                            <button class="btn btn-danger">删除</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!--展示数据条数-->
+            <div class="show_manage_blog">
+                <span>共</span>
+                <span id="manage_blog_totalPage">12</span>
+                <span>页</span>
+                <span id="manage_blog_totalCount">41</span>
+                <span>条</span>
+            </div>
+            <!--分页器-->
+            <div class="paginator">
+                <ul class="paginator_ul">
+                    <li class="page_number first_page">
+                        <button  class="page_btn">第一页</button>
+                    </li>
+                    <li class="page_number before_page">
+                        <button  class="page_btn">上一页</button>
+                    </li>
+                    <li  class="page_number">
+                        <button class="page_btn current_page">1</button>
+                    </li>
+                    <li class="page_number">
+                        <button  class="page_btn">2</button>
+                    </li>
+                    <li class="page_number">
+                        <button  class="page_btn">3</button>
+                    </li>
+                    <li class="page_number next_page">
+                        <button  class="page_btn">下一页</button>
+                    </li>
+                    <li class="page_number last_page">
+                        <button  class="page_btn">最后一页</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--管理用户-->
+    <div class="manage_user_box">
+        <h1 class="main-page-title">管理用户</h1>
+    </div>
+</div>
+
+<script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+<script src="../static/js/ManagePage.js"></script>
+<script>
+    $(function () {
+        get_not_check_blog("1");
+    })
+
+    /*获取未审核博客*/
+    function get_not_check_blog(currentPage) {
+        let url='http://localhost:8080/articleServlet?action=get_not_check_blog'
+        axios({
+            method:"GET",
+            url:url,
+            params:{
+                currentPage:currentPage
+            }
+        }).then(function (res) {
+            console.log(res);
+            let pb=res['data']['data'];
+            /*分页工具条*/
+            $("#totalPage").html(pb['totalPage']);
+            $("#totalCount").html(pb['totalCount']);
+            /*展示分页页码*/
+            let lis = "";
+            let first_Page=`<li class="page_number first_page">
+                <button class="page_btn_operation">第一页</button>
+            </li>`;
+            let beforePage=`<li class="page_number before_page">
+                <button class="page_btn_operation">上一页</button>
+            </li>`;
+            lis+=first_Page;lis+=beforePage;
+            /*完成前5后4的页码显示*/
+            let begin;
+            let end;
+            if(pb['totalPage']<10)
+            {
+                begin=1;
+                end=pb['totalPage'];
+            }else{
+                begin=pb['currentPage']-5;
+                end=pb['currentPage']+4;
+
+                if(begin<1){
+                    begin=1;
+                    end=begin+9;
+                }
+                if(end>pb['totalPage']){
+                    end=pb['totalPage'];
+                    begin=end-9;
+                }
+            }
+            /*展示页码*/
+            for(let i=begin; i<=end; i++){
+                if(i.toString()===currentPage)
+                {
+                    let td=`<li class="page_number">
+                    <button class="page_btn current_page">${i}</button>
+                </li>`;
+                    lis+=td;
+                }else {
+                    let td = `<li class="page_number">
+                    <button class="page_btn">${i}</button>
+                </li>`;
+                    lis+=td;
+                }
+            }
+
+            let nextPage=`<li class="page_number next_page">
+                <button class="page_btn_operation">下一页</button>
+            </li>`;
+            let lastPage=`<li class="page_number last_page">
+                <button class="page_btn_operation">最后一页</button>
+            </li>`;
+            lis+=nextPage;lis+=lastPage;
+
+            $(".paginator_ul").html(lis);
+            /*页码点击*/
+            $(".page_btn").off("click");
+            $(".page_btn").click(function () {
+                get_not_check_blog($(this).text());
+            })
+            /*上一页*/
+            $(".before_page").click(function () {
+                if(currentPage!=="1")
+                {
+                    get_not_check_blog((Number(currentPage)-1).toString());
+                }else{
+                    modal("没有上一页啦！");
+                }
+            })
+            /*第一页*/
+            $(".first_page").click(function () {
+                if(currentPage!=="1")
+                    get_not_check_blog("1");
+            })
+            /*下一页*/
+            $(".next_page").click(function () {
+                if(currentPage!==pb['totalPage'].toString())
+                {
+                    get_not_check_blog((Number(currentPage)+1).toString());
+                }else{
+                    modal("已经到头啦！");
+                }
+            })
+            /*最后一页*/
+            $(".last_page").click(function () {
+                if(currentPage!==pb['totalPage'].toString())
+                    get_not_check_blog(pb['totalPage'].toString());
+            })
+
+            let tds="";
+            let td_head=`<thead class="check_blog_title">
+            <tr>
+                <td>博客ID</td>
+                <td>博客标题</td>
+                <td>博客作者</td>
+                <td>发布时间</td>
+                <td>可进行的操作</td>
+            </tr>
+            </thead>`;
+            tds+=td_head;
+            /*数据展示*/
+            for(let j=0;j<pb['list'].length;j++){
+                let data1=pb['list'][j];
+                let td1=`<tr class="check_blog_item">
+                     <td class="check_blog_info">${data1['id']}</td>
+                     <td class="check_blog_info">${data1['article_title']}</td>
+                     <td class="check_blog_info">${data1['author_name']}</td>
+                     <td class="check_blog_info">${data1['create_time']}</td>
+                     <td class="check_blog_operation">
+                         <button class="btn btn-default view_blog">查看</button>
+                         <button class="btn btn-success blog_pass">通过</button>
+                         <button class="btn btn-danger blog_not_pass">不通过</button>
+                     </td>
+                 </tr>`;
+                tds+=td1;
+            }
+            $(".check_blog_table").html(tds);
+
+            /*查看博客*/
+            $(".view_blog").off("click");
+            $(".view_blog").click(function () {
+                let blog_id=$(this).parent().parent().children().first().text();
+                window.open("ManageViewBlog.html?blog_id="+blog_id);
+            })
+            /*通过博客*/
+            $(".blog_pass").off("click");
+            $(".blog_pass").click(function () {
+                let blog_id=$(this).parent().parent().children().first().text();
+                pass_blog(blog_id,currentPage);
+                modal("操作成功");
+            })
+            /*不通过博客*/
+            $(".blog_not_pass").off("click");
+            $(".blog_not_pass").click(function () {
+                let blog_id=$(this).parent().parent().children().first().text();
+                not_pass_blog(blog_id,currentPage);
+                modal("操作成功");
+            })
+        })
+    }
+
+    /*获取所有博客*/
+    function get_manage_blog(currentPage) {
+        let url='http://localhost:8080/articleServlet?action=get_manage_blog'
+        axios({
+            method:"GET",
+            url:url,
+            params:{
+                currentPage:currentPage
+            }
+        }).then(function (res) {
+            console.log(res);
+            let pb=res['data']['data'];
+
+            $("#manage_blog_totalPage").html(pb['totalPage']);
+            $("#manage_blog_totalCount").html(pb['totalCount']);
+
+            /*展示分页页码*/
+            let lis = "";
+            let first_Page=`<li class="page_number first_page">
+                <button class="page_btn_operation">第一页</button>
+            </li>`;
+            let beforePage=`<li class="page_number before_page">
+                <button class="page_btn_operation">上一页</button>
+            </li>`;
+            lis+=first_Page;lis+=beforePage;
+            /*完成前5后4的页码显示*/
+            let begin;
+            let end;
+            if(pb['totalPage']<10)
+            {
+                begin=1;
+                end=pb['totalPage'];
+            }else{
+                begin=pb['currentPage']-5;
+                end=pb['currentPage']+4;
+
+                if(begin<1){
+                    begin=1;
+                    end=begin+9;
+                }
+                if(end>pb['totalPage']){
+                    end=pb['totalPage'];
+                    begin=end-9;
+                }
+            }
+            /*展示页码*/
+            for(let i=begin; i<=end; i++){
+                if(i.toString()===currentPage)
+                {
+                    let td=`<li class="page_number">
+                    <button class="page_btn current_page">${i}</button>
+                </li>`;
+                    lis+=td;
+                }else {
+                    let td = `<li class="page_number">
+                    <button class="page_btn">${i}</button>
+                </li>`;
+                    lis+=td;
+                }
+            }
+
+            let nextPage=`<li class="page_number next_page">
+                <button class="page_btn_operation">下一页</button>
+            </li>`;
+            let lastPage=`<li class="page_number last_page">
+                <button class="page_btn_operation">最后一页</button>
+            </li>`;
+            lis+=nextPage;lis+=lastPage;
+
+            $(".paginator_ul").html(lis);
+            /*页码点击*/
+            $(".page_btn").off("click");
+            $(".page_btn").click(function () {
+                get_manage_blog($(this).text());
+            })
+            /*上一页*/
+            $(".before_page").click(function () {
+                if(currentPage!=="1")
+                {
+                    get_manage_blog((Number(currentPage)-1).toString());
+                }else{
+                    modal("没有上一页啦！");
+                }
+            })
+            /*第一页*/
+            $(".first_page").click(function () {
+                if(currentPage!=="1")
+                    get_manage_blog("1");
+            })
+            /*下一页*/
+            $(".next_page").click(function () {
+                if(currentPage!==pb['totalPage'].toString())
+                {
+                    get_manage_blog((Number(currentPage)+1).toString());
+                }else{
+                    modal("已经到头啦！");
+                }
+            })
+            /*最后一页*/
+            $(".last_page").click(function () {
+                if(currentPage!==pb['totalPage'].toString())
+                    get_manage_blog(pb['totalPage'].toString());
+            })
+
+            let tds="";
+            let td_head=`<thead class="manage_blog_title">
+                      <tr>
+                          <td>博客ID</td>
+                          <td>博客标题</td>
+                          <td>博客作者</td>
+                          <td>文章类型</td>
+                          <td>发布时间</td>
+                          <td>可进行的操作</td>
+                      </tr>
+                      </thead>`;
+            tds+=td_head;
+            /*数据展示*/
+            for(let j=0;j<pb['list'].length;j++){
+                let data1=pb['list'][j];
+                let td1=` <tr class="manage_blog_item">
+                          <td class="manage_blog_info">${data1['id']}</td>
+                          <td class="manage_blog_info">${data1['article_title']}</td>
+                          <td class="manage_blog_info">${data1['author_name']}</td>
+                          <td class="manage_blog_info">${data1['is_original']}</td>
+                          <td class="manage_blog_info">${data1['create_time']}</td>
+                          <td class="manage_blog_operation">
+                              <button class="btn btn-primary view_blog">查看</button>
+                              <button class="btn btn-danger del_blog">删除</button>
+                          </td>
+                      </tr>`;
+                tds+=td1;
+            }
+            $(".manage_blog_table").html(tds);
+
+            /*查看博客*/
+            $(".view_blog").off("click");
+            $(".view_blog").click(function () {
+                let blog_id=$(this).parent().parent().children().first().text();
+                window.open("ManageViewBlog.html?blog_id="+blog_id);
+            })
+
+            /*删除博客*/
+            $(".del_blog").off("click");
+            $(".del_blog").click(function () {
+                let blog_id=$(this).parent().parent().children().first().text();
+                del_blog(blog_id,currentPage);
+                modal("删除成功");
+            })
+
+        })
+    }
+
+    /*删除博客*/
+    function del_blog(blog_id,currentPage) {
+        let url='http://localhost:8080/articleServlet?action=del_blog'
+        axios({
+            method:"GET",
+            url:url,
+            params:{
+                blog_id:blog_id
+            }
+        }).then(function (res) {
+            console.log(res);
+            get_manage_blog(currentPage);
+        })
+    }
+
+    /*通过博客*/
+    function pass_blog(blog_id,currentPage) {
+        let url='http://localhost:8080/articleServlet?action=pass_blog'
+        axios({
+            method:"GET",
+            url:url,
+            params:{
+                blog_id:blog_id
+            }
+        }).then(function (res) {
+            console.log(res);
+            get_not_check_blog(currentPage);
+        })
+    }
+
+    /*不通过博客*/
+    function not_pass_blog(blog_id,currentPage) {
+        let url='http://localhost:8080/articleServlet?action=not_pass_blog'
+        axios({
+            method:"GET",
+            url:url,
+            params:{
+                blog_id:blog_id
+            }
+        }).then(function (res) {
+            console.log(res);
+            get_not_check_blog(currentPage);
+        })
+    }
+
+    /*退出登录*/
+    $(".out-page").click(function () {
+        location.href="ManagerLogin.html";
+    })
+    /*博客审核*/
+    $("#check_blog").click(function () {
+        hide_page();
+        get_not_check_blog("1");
+        $(".check_blog_box").show();
+    })
+    /*管理博客*/
+    $("#manage_blog").click(function () {
+        hide_page();
+        get_manage_blog("1");
+        $(".mange_blog_box").show();
+    })
+    /*管理用户*/
+    $("#mange_user").click(function () {
+        hide_page();
+        $(".manage_user_box").show();
+    })
+
+    /*隐藏所有界面*/
+    function hide_page() {
+        $(".check_blog_box").hide();
+        $(".mange_blog_box").hide();
+        $(".manage_user_box").hide();
+    }
+
+    /*模态框函数*/
+    function modal(content) {
+        $('.modal-body').html(content);
+        $("#myModal").modal("show");
+    }
+</script>
+</body>
+</html>

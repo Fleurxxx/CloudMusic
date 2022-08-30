@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    /*box-sizing: border-box;*/
+}
+body{
+    /*设置背景的div的坐标在屏幕的最左最上*/
+    position:fixed;/*固定定位*/
+    top: 0;
+    left: 0;
+    /*即和body大小一样，覆盖整个屏幕*/
+    width: 100vw;
+    height:100vh;
+    /*这个zoom解决兼容问题*/
+    zoom: 1;
+    /*cover，使其占满整个盒子，不会留白*/
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    /*背景图片定位在中间，靠顶；这样当屏幕尺寸改变时，中间内容都会一直展示*/
+    background-position: center top;
+    /*这个z-index值要设置为最小，其他内容才能显示在背景图之上（最小就行，-1000是我随便设置的）*/
+    z-index:-1000;
+    min-height: 100vh;
+    background-image: url("../img/images/上传背景1.png");
+    display: grid;
+    place-items: center;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    /*background-image: linear-gradient(120deg, #3498db, #8e44ad);*/
+}
+.upload-box{
+    /*width:100%;*/
+    /*height:100%;*/
+    overflow: scroll;
+    overflow-x:auto;
+    overflow-y:auto;
+    width: 420px;
+    background: #f1f1f1;
+    background: rgba(255, 255, 255, 0.59);
+    height: 480px;
+    padding: 80px 40px;
+    border-radius: 20px;
+    position: absolute;
+    left: 36%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #c1c1c1;
+}
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: #fafafa;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, .4);
+    -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
+}
+.up-tab-box{
+    /*width: 20%;*/
+    border-collapse:separate;
+    border-spacing:10px;
+}
+
+.progress {
+    width: 300px;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 10px;
+    margin: 10px 0px;
+    overflow: hidden;
+}
+
+.progress>div {
+    width: 0;
+    height: 100%;
+    background-color: blue;
+    transition: all 1s;
+}
+
+#show {
+    width: 300px;
+    height: 300px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    color: #8c8c8c;
+    border: 6px dashed #bfbfbf;
+    border-radius: 16px;
+    user-select: none;
+}
+.look{
+    width: 286px;
+    height: 286px;
+    border-radius: 16px;
+}
+.up-icon {
+    color: #40a9ff;
+    font-size: 50px;
+}
+.up-btn{
+    width: 300px;
+    height: 100px;
+    background-color: transparent;
+    border: transparent;
+    justify-content: center;
+    align-items: center;
+    margin-top:20px;
+}
+
+

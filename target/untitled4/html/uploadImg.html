@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传头像</title>
+    <link rel="stylesheet" href="../css/uploadMusic.css">
+    <link rel="shortcut icon" href="../img/vectorgraph/icon.png" type="image/x-icon">
+</head>
+<body>
+<div class="upload-box">
+    <h1>欢迎来更换头像！</h1><br>
+    <p style="font-weight: bold;">先预览一下，再上传。</p></br></br>
+    <table class="up-tab-box">
+        <td>上传头像：</td>
+        <td>
+            <input type="file" name="uoload" id="uoload">
+        </td>
+    </table>
+    <!-- 进度条 -->
+    <div class="progress">
+        <div></div>
+    </div>
+    <!-- 展示区域 -->
+    <div id="show">
+        <img src="../img/vectorgraph/图图.png" class="look" id="look">
+    </div>
+    <button id="d1" class="up-btn">
+        <ion-icon class="up-icon"  name="cloud-upload"></ion-icon>
+        <p class="tip">点击上传</p>
+    </button>
+</div>
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+    $(function() {
+        let avatarFile;
+        $("#uoload").change(function(){
+            // 获取文件路径
+            let filePath = $(this).val();
+            if(filePath!=""){
+                // 截取上传文件的格式为".***"，从而进判断是否为图片格式
+                let fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase();
+                // 检查是否是图片格式
+                if( !fileFormat.match(/.png|.jpg|.jpeg|.gif/) ) {
+                    alert('上传错误,文件格式必须为：png/jpg/jpeg/gif');
+                    return;
+                }
+                //转成可以在本地预览的格式
+                avatarFile=this.files[0];
+                avatarFile=new File([avatarFile],new Date().getTime()+fileFormat);
+                let src = window.URL.createObjectURL(avatarFile);
+                //隐藏图标
+                $("#cloud-upload").css("display","none");
+                $(".tip").hide();
+                // 将图片路径赋值给img中的src
+                $("#look").attr("src",src);
+                $('#show').css({
+                    backgroundImage: `url(../img/cover/${res.path})`,
+                });
+            }
+        });
+
+        $("#d1").click(function () {
+            let formData = new FormData();//这里需要实例化一个FormData来进行文件上传
+            formData.append("file",avatarFile);
+            $.ajax({
+                url: 'http://localhost:8080/imgUploadServlet',
+                dataType:'json',
+                type: 'POST',
+                data: formData,
+                cache: false,        // 不缓存
+                processData : false, // 使数据不做处理
+                contentType : false, // 不要设置Content-Type请求头
+                //添加自定义属性,监听上下文的进度
+                xhr: function() {
+                    //创建原生的ajax请求对象
+                    let xhr = new XMLHttpRequest();
+                    //监听进度的一个事件
+                    xhr.upload.onprogress = function(e) {
+                        console.log(e.total); //文件大小
+                        console.log(e.loaded); //上传多少
+                        let w = (e.loaded / e.total) * 100 + '%'
+                        $('.progress > div').css({
+                            width: w
+                        })
+                    }
+                    return xhr
+                },
+                success: function (data) {
+                    if(data.success){//成功
+                        alert("上传头像成功");
+                        location.reload(true);
+                        location.href="personalSetting.html";
+                    } else {
+                        alert("上传头像失败");
+                    }
+                }
+                ,error:function(data){
+                    alert("上传头像失败");
+                }
+            })
+        })
+
+        // $('#d1').on('click', function() {
+        //     //获取上传文件
+        //     let file = $('#uoload')[0].files[0];
+        //     //创建文件上传格式对/
+        //     let formData = new FormData();
+        //     console.log(file);
+        //     formData.append('fileInfo', file);
+        //
+        //     // param.append('files', file) // 通过append向form对象添加数据
+        //     console.log(formData);                                 // 添加form表单中其他数据
+        //     console.log(formData.get('files')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
+        //
+        //     // axios.post('http://localhost:8080/imgUploadServlet',formData,{
+        //     //     'Content-type' : 'multipart/form-data'
+        //     // }
+        //     // ).then(response => {
+        //     //     console.log(response.data)
+        //     //     if (response.data.code === 0) {
+        //     //         console.log(response.data)
+        //     //     }
+        //     // })
+        //
+        //     //网络请求
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: 'http://localhost:8080/imgUploadServlet',
+        //         // headers: {
+        //         //     'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary123456654321'
+        //         // },
+        //         // transformRequest: [function(data, headers) {
+        //         //     // 去除post请求默认的Content-Type
+        //         //     delete headers.post['Content-Type']
+        //         //     return data
+        //         // }],
+        //         // contentType:'multipart/form-data;charset=UTF-8',
+        //         data: {
+        //             formData
+        //         },
+        //         //设置文件上传格式
+        //         processData: false,
+        //         contentType: false,
+        //         //添加自定义属性,监听上下文的进度
+        //         xhr: function() {
+        //             //创建原生的ajax请求对象
+        //             let xhr = new XMLHttpRequest();
+        //             //监听进度的一个事件
+        //             xhr.upload.onprogress = function(e) {
+        //                 console.log(e.total); //文件大小
+        //                 console.log(e.loaded); //上传多少
+        //                 let w = (e.loaded / e.total) * 100 + '%'
+        //                 $('.progress > div').css({
+        //                     width: w
+        //                 })
+        //             }
+        //             return xhr
+        //         },
+        //         //获取数据
+        //         success: (res) => {
+        //             console.log(res);
+        //             $("#cloud-upload").css("display","none");
+        //             $(".tip").hide();
+        //             $('#show').css({
+        //                 backgroundImage: `url(../img/cover/${res.path})`,
+        //             });
+        //         }
+        //     })
+        // });
+    })
+</script>
+</body>
+</html>

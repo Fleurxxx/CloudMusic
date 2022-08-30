@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace=绑定一个指定的dao/mapper接口-->
+<mapper namespace="com.mapper.SongMapper">
+
+    <!--    根据id查询歌曲信息   -->
+    <select id="getSongById" parameterType="int" resultType="com.entity.Song">
+        select *
+        from test_nc.song
+        <where>
+            <if test="user_id!=null">
+                and song_id=#{song_id}
+            </if>
+            and (song_state=1 or song_state=2 or song_state=4)
+        </where>
+    </select>
+
+    <!--    上传歌曲   -->
+    <insert id="updateSong" parameterType="com.entity.Song">
+        insert into test_nc.song (song_path,song_id,song_singerid,song_state)
+        values (#{song_path},#{song_id},#{song_singerid},#{song_state});
+    </insert>
+
+    <!--    上传歌词   -->
+    <insert id="updateSongLrc" parameterType="com.entity.Song">
+        update test_nc.song set lyric_path=#{lyric_path} where song_singerid=#{song_singerid};
+    </insert>
+
+    <!--    上传封面   -->
+    <insert id="updateSongImg" parameterType="com.entity.Song">
+        update test_nc.song set photo_path=#{photo_path} where song_singerid=#{song_singerid};
+    </insert>
+
+
+    <!--    上传歌曲信息   -->
+    <insert id="addSongMsg" parameterType="com.entity.Song">
+        insert into test_nc.song (song_path,song_name,song_id,song_singerid,song_state,song_singername,lyric_path,photo_path)
+        values (#{song_path},#{song_name},#{song_id},#{song_singerid},0,#{song_singername},#{lyric_path},#{photo_path});
+    </insert>
+
+    <!--  查找个人（包括未审核）歌曲列表  -->
+    <select id="selectSongsList" resultType="com.entity.Song">
+        select song_name,song_singername,song_path,song_id,photo_path
+        from test_nc.song
+        where song_singerid=#{userid}
+        limit ${page}, ${listRows};
+    </select>
+
+    <!--查找待审核歌曲列表-->
+    <select id="selectUncheckeSongsList"   resultType="com.entity.Song">
+        select song_name, song_id, song_singerid, song_singername, song_path, photo_path
+        from test_nc.song
+        where song_state=0;
+    </select>
+
+    <!--查找已审核歌曲列表-->
+    <select id="selectPassSongsList"   resultType="com.entity.Song">
+        select song_name, song_id, song_singerid, song_singername, song_path, photo_path,song_state
+        from test_nc.song
+        where song_state!=0;
+    </select>
+
+    <!--  修改（审核状态）通过审核 -->
+    <insert id="passVerification" parameterType="com.entity.Song">
+        update test_nc.song set song_state=1 where song_id=#{song_id};
+    </insert>
+
+    <!--  修改（审核状态）取消通过审核 -->
+    <insert id="cancelPassVerification" parameterType="com.entity.Song">
+        update test_nc.song set song_state=0 where song_id=#{song_id};
+    </insert>
+
+    <!--  修改（审核状态）限流 -->
+    <insert id="currentLimiting" parameterType="com.entity.Song">
+        update test_nc.song set song_state=2 where song_id=#{song_id};
+    </insert>
+
+    <!--  修改（审核状态）取消限流 -->
+    <insert id="cancelCurrentLimiting" parameterType="com.entity.Song">
+        update test_nc.song set song_state=1 where song_id=#{song_id};
+    </insert>
+
+    <!--  修改（审核状态）禁止 -->
+    <insert id="banSong" parameterType="com.entity.Song">
+        update test_nc.song set song_state=3 where song_id=#{song_id};
+    </insert>
+
+    <!--  修改（审核状态）取消禁止 -->
+    <insert id="cancelBanSong" parameterType="com.entity.Song">
+        update test_nc.song set song_state=0 where song_id=#{song_id};
+    </insert>
+
+    <!--  修改（审核状态）推荐 -->
+    <insert id="recommendSong" parameterType="com.entity.Song">
+        update test_nc.song set song_state=4 where song_id=#{song_id};
+    </insert>
+
+    <!--  修改（审核状态）取消推荐 -->
+    <insert id="cancelRecommendSong" parameterType="com.entity.Song">
+        update test_nc.song set song_state=1 where song_id=#{song_id};
+    </insert>
+
+    <!--  查找已经通过审核的歌曲列表  -->
+    <select id="selectSongsListAC" resultType="com.entity.Song">
+        select song_name,song_singername,song_path,song_id
+        from test_nc.song
+        where song_singerid=#{userid} and (song_state=1 or song_state=2 or song_state=4);
+    </select>
+
+    <!--  查找喜欢的歌曲列表  -->
+    <select id="selectLoveSongsList" resultType="com.entity.Song">
+        select song_name,song_singername,song_path,song_id
+        from test_nc.song
+        where song_id
+        in (select song_id from test_nc.love_song where state=1 and user_id=#{userid});
+    </select>
+
+    <!--查找推荐歌曲列表-->
+    <select id="selectreCommendSongsList"   resultType="com.entity.Song">
+        select song_name, song_id, song_singerid, song_singername, song_path, photo_path
+        from test_nc.song
+        where song_state=4;
+    </select>
+
+    <!--删除歌曲-->
+    <insert id="deleteSong" parameterType="com.entity.Song">
+        delete from test_nc.song where song_id=#{song_id};
+    </insert>
+
+    <!--  查询，判断是否关注过 -->
+    <select id="selectLoveStateNow"   resultType="java.lang.Integer">
+        select * from test_nc.love_song where state=1 and song_id=#{song_id} and user_id=#{user_id};
+    </select>
+    <!--  查询，判断表中是否存在数据 -->
+    <select id="selectLoveState" parameterType="com.entity.LoveSong" resultType="boolean">
+        <![CDATA[ select count(1) from test_nc.love_song where song_id=#{song_id} and user_id=#{user_id}]]>
+    </select>
+    <!--    添加喜欢状态（喜欢）   -->
+    <insert id="updateLoveAC" parameterType="com.entity.LoveSong">
+        insert into test_nc.love_song(state,user_id,song_id)
+        values (1,#{user_id},#{song_id});
+    </insert>
+    <!--  修改喜欢状态（喜欢） -->
+    <insert id="updateLoveACC" parameterType="com.entity.LoveSong">
+        update test_nc.love_song set state=1 where song_id=#{song_id} and user_id=#{user_id};
+    </insert>
+    <!--  修改喜欢状态（取消喜欢） -->
+    <insert id="updateLoveWA" parameterType="com.entity.LoveSong">
+        update test_nc.love_song set state=0 where song_id=#{song_id} and user_id=#{user_id};
+    </insert>
+</mapper>

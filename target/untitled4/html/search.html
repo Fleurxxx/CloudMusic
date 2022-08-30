@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索</title>
+    <link rel="stylesheet" type="text/css" href="../css/search.css">
+    <link rel="shortcut icon" href="../img/vectorgraph/icon.png" type="image/x-icon">
+<!--    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">-->
+</head>
+<script src="../js/jquery-3.2.1.js" type="text/javascript"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<body>
+    <!--用户把点击加入歌单显示页面-->
+    <div class="addSongList_showDiv">
+        <div class="addSongList_showDiv_header">添加到歌单<span title="关闭" id="none_addSongList_showDiv">+</span></div>
+        <div class="addSongList_songList" songId>
+            <!--用于显示用户创建的歌单-->
+        </div>
+    </div>
+    <div class="search_content_div">
+        <header class="search_content_header">
+<!--            <div class="search_text_div">-->
+<!--                <input type="text" id="searchSongName_input" align="center" placeholder="输入关键词">-->
+<!--                <button  id="search_button">搜索</button>-->
+<!--            </div>-->
+            <div class="search_msgcount">
+                搜索“<span id="searchName"></span>”，找到&nbsp;<span id="songRowNum"></span>&nbsp;条相关内容<span id="searchTypeName"></span>
+            </div>
+            <div class="search_nomsgcount">
+                搜索内容不能为空, 请重新输入关键字。
+            </div>
+        </header>
+        <!-- 搜索类型 -->
+         <div class="search_type">
+            <span id="search_song" class="search_type_span" onclick=javascrtpt:searchSongs(0)>单曲</span>
+<!--            <span id="search_songList" class="search_type_span">歌单</span>-->
+            <span id="search_singer" class="search_type_span" onclick=javascrtpt:searchSingers(0)>歌手</span>
+            <span id="search_user" class="search_type_span" onclick=javascrtpt:searchUsers(0)>用户</span>
+             <div class="search-page page1" id="page1">
+                 <button class="before-btn" id="beforepage1" type="button" onclick=javascrtpt:beforsong()>上一页</button>
+                 <span class="pagenum1"></span>
+                 <button class="next-btn" id="nextpage1" type="button" onclick=javascrtpt:nextsong()>下一页</button>
+             </div>
+             <div class="search-page page2" id="page2">
+                 <button class="before-btn" id="beforepage2" type="button" onclick=javascrtpt:beforsinger()>上一页</button>
+                 <span class="pagenum2"></span>
+                 <button class="next-btn" id="nextpage2" type="button" onclick=javascrtpt:nextsinger()>下一页</button>
+             </div>
+             <div class="search-page page3" id="page3">
+                 <button class="before-btn" id="beforepage3" type="button" onclick=javascrtpt:beforuser()>上一页</button>
+                 <span class="pagenum3"></span>
+                 <button class="next-btn" id="nextpage3" type="button" onclick=javascrtpt:nextuser()>下一页</button>
+             </div>
+        </div>
+
+        <div class="user-list">
+            <div class="user-list-item-box">
+                <div class="user-list-item-content">
+                    <div class="user-list-head-box">
+                        <img class="user-list-head-img" src="../img/images/默认头像.png">
+                    </div>
+                    <div class="user-list-info-box">
+                        <div class="user-list-info-name">
+                            <a href="#" style="text-decoration: none">昵称</a>
+                        </div>
+                        <div class="user-list-info-detail">
+                            个人简介
+                        </div>
+                    </div>
+                    <div class="user-list-type-box">
+                        <button class="user-list-type user_type">
+                            关注
+                        </button>
+                    </div>
+                    <div class="user-list-info-fans-box">
+                        粉丝数：<span class="user-list-fans"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="user-list-item-box">
+                <div class="user-list-item-content">
+                    <div class="user-list-head-box">
+                        <img class="user-list-head-img" src="../img/images/默认头像.png">
+                    </div>
+                    <div class="user-list-info-box">
+                        <div class="user-list-info-name">
+                            <a href="#" style="text-decoration: none">昵称</a>
+                        </div>
+                        <div class="user-list-info-detail">
+                            个人简介
+                        </div>
+                    </div>
+                    <div class="user-list-type-box">
+                        <button class="user-list-type user_typeac">
+                            已关注
+                        </button>
+                    </div>
+                    <div class="user-list-info-fans-box">
+                        粉丝数：<span class="user-list-fans"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="search-result-div">
+            <table id="searchSong_table" border="0" cellpadding="0" cellspacing="0">
+
+            </table>
+        </div>
+        <!-- 搜索歌曲 -->
+        <div class="search-song-box">
+            <table class="search-table" >
+                <tr class="search-table-tr">
+                    <th>封面</th>
+                    <th>歌名</th>
+                    <th>歌手</th>
+                    <th>操作</th>
+                </tr>
+                <tbody id="info" valign="middle">
+                </tbody>
+            </table>
+            <div class="search-song-box">
+                <nav aria-label="Page navigation">
+                    <ul id="all" class="pagination">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="pageNum_div">
+
+        </div>
+    </div>
+    <script>
+        //获取
+        let conn = localStorage.getItem('content');
+        let uuid = localStorage.getItem('uuserid');
+        //当前页码
+        let nowPage1=0;
+        let nowPage2=0;
+        let nowPage3=0;
+        $(".page2").css("display","none");
+        $(".page3").css("display","none");
+        if(conn.valueOf("")){//不是空的时候
+            $(".search_msgcount").css("display","block");
+            $(".search_nomsgcount").css("display","block");
+        }else{//是空的时候
+            //隐藏搜索提示
+            $(".search_msgcount").css("display","none");
+            $(".search_nomsgcount").css("display","block");
+        }
+        $(function() {
+            $(".pagenum1").html(nowPage1+1);
+            //隐藏其他两个分页按钮
+            $(".page2").css("display","none");
+            $(".page3").css("display","none");
+            $(".user-list").css("display","none");
+            {
+                axios({
+                    method: 'POST',
+                    url: 'http://localhost:8080/searchServlet?method=searchsong',
+                    data:{
+                        conn:conn,
+                        type:nowPage1//当前页码
+                    }
+                }).then(function (response) {
+                    console.log(response);
+                    if(response.data.code===200) {//验证成功显示个人信息
+                        let data = response['data']['data'];
+                        console.log(data.length);
+                        console.log(data);
+                        $('#searchName').html(conn);
+                        $('#songRowNum').html(data.length);
+                        let src1;
+                        let s = "";
+                        for (let i = 0; i < data.length; i++) {
+                            if(data[i]["photo_path"]==null || data[i]["photo_path"]==""){
+                                src1 = "../img/cover/封面1.png";
+                            }else{
+                                src1 = data[i]["photo_path"];
+                            }
+                            s += "<tr>";
+                            s += "<td> <img src=\""+ src1 + "\"  style='height: 50px'></td>";
+                            s += "<td>" + data[i]["song_name"] + "</td>";
+                            s += "<td>" + data[i]["song_singername"] + "</td>";
+                            s += "<td > <button class='btn btn-default btn-sm' onclick=\"deleteInfo(" + data[i]["song_id"] + ")\" > 播放</button> " +
+                                "<button class='btn btn-default btn-sm' onclick=\"loveInfo(" + data[i]["song_id"] + ")\" > 喜欢</button>" +
+                                "</td>";
+                            s += "</tr>";
+                        }
+                        $("#info").html(s);
+                        var audios = document.getElementsByTagName("audio");
+
+                        // 暂停函数
+                        function pauseAll() {
+                            var self = this;
+                            [].forEach.call(audios, function (i) {
+                                // 将audios中其他的audio全部暂停
+                                i !== self && i.pause();
+                            })
+                        }
+
+                        // 给play事件绑定暂停函数
+                        [].forEach.call(audios, function (i) {
+                            i.addEventListener("play", pauseAll.bind(i));
+                        });
+                    }
+                })
+            }
+            //点击按钮变换搜索列表
+            // 设置table中tr奇数行背景颜色
+            // $("#searchSong_table tr:even").css("background","#F7F7F7");
+            // // 为分类的span元素绑定click事件
+            // $('#search_song').bind("click",function(){  //搜索歌曲
+            //     console.log("1");
+            // });
+            // $('#search_songList').bind("click",function(){  //搜索歌单
+            //     console.log("2");
+            //     $(".user-list").css("display","none");
+            //     $(".search-song-box").css("display","block");
+            //     event.stopPropagation();
+            // });
+            // $('#search_singer').bind("click",function(){  //搜索歌手
+            //     console.log("3");
+            // });
+            // $('#search_user').bind("click",function(){  //搜索用户
+            //     console.log("4");
+            // });
+        });
+
+        //搜索歌曲
+        function searchSongs(page){
+            $(".pagenum1").html(page+1);
+            $("#page1").css("display","block");
+            $("#page2").css("display","none");
+            $("#page3").css("display","none");
+            $(".user-list").css("display","none");
+            $(".search-song-box").css("display","block");
+            axios({
+                method: 'POST',
+                url: 'http://localhost:8080/searchServlet?method=searchsong',
+                data:{
+                    conn:conn,
+                    type:page//当前页码
+                }
+            }).then(function (response) {
+                console.log(response);
+                if(response.data.code===200) {//验证成功显示个人信息
+                    let data = response['data']['data'];
+                    console.log(data.length);
+                    console.log(data);
+                    $('#searchName').html(conn);
+                    $('#songRowNum').html(data.length);
+                    let src1;
+                    let s = "";
+                    for (let i = 0; i < data.length; i++) {
+                        if(data[i]["photo_path"]==null || data[i]["photo_path"]==""){
+                            src1 = "../img/cover/封面1.png";
+                        }else{
+                            src1 = data[i]["photo_path"];
+                        }
+                        s += "<tr>";
+                        s += "<td> <img src=\""+ src1 + "\"  style='height: 50px'></td>";
+                        s += "<td>" + data[i]["song_name"] + "</td>";
+                        s += "<td>" + data[i]["song_singername"] + "</td>";
+                        s += "<td > <button class='btn btn-default btn-sm' onclick=\"deleteInfo(" + data[i]["song_id"] + ")\" > 播放</button> " +
+                            "<button class='btn btn-default btn-sm' onclick=\"loveInfo(" + data[i]["song_id"] + ")\" > 喜欢</button>" +
+                            "</td>";
+                        s += "</tr>";
+                    }
+                    $("#info").html(s);
+                    var audios = document.getElementsByTagName("audio");
+
+                    // 暂停函数
+                    function pauseAll() {
+                        var self = this;
+                        [].forEach.call(audios, function (i) {
+                            // 将audios中其他的audio全部暂停
+                            i !== self && i.pause();
+                        })
+                    }
+
+                    // 给play事件绑定暂停函数
+                    [].forEach.call(audios, function (i) {
+                        i.addEventListener("play", pauseAll.bind(i));
+                    });
+                }
+            })
+            event.stopPropagation();    //  阻止事件冒泡
+        }
+
+        //搜索用户
+        function searchUsers(page) {
+            console.log(page)
+            $(".pagenum3").html(page+1);
+            $("#page1").css("display","none");
+            $("#page2").css("display","none");
+            $("#page3").css("display","block");
+            $(".search-song-box").css("display","none");
+            $(".user-list").css("display","block");
+            axios({
+                method: 'POST',
+                url: 'http://localhost:8080/searchServlet?method=searchuser',
+                data:{
+                    conn:conn,
+                    uuid:uuid,
+                    nowpage:page//当前页码
+                }
+            }).then(function (response) {
+                console.log(response);
+                if(response.data.code===200) {
+                    let data1 = response['data']['data'];
+                    $('#searchName').html(conn);
+                    $('#songRowNum').html(data1.length);
+                    $(".user-list").empty();
+                    console.log(data1.length);
+                    for(let i=0;i<data1.length;i++){
+                        console.log(data1[i]['focusid']);
+                        push_userlist(data1[i]);
+                    }
+                    $(".user-list-type").click(function () {
+                        console.log($(this).attr("searchid"));
+                        if($(this).attr("class")==="user-list-type user_type"){
+                            $(this).attr("class","user-list-type user_typeac");
+                            $(this).text("已关注");
+                            $.post("http://localhost:8080/userServlet?method=concern",{fans_focusid:$(this).attr("searchid"),fans_id:uuid});
+                        }else{
+                            $(this).attr("class",'user-list-type user_type');
+                            $(this).text("关注");
+                            $.post("http://localhost:8080/userServlet?method=cancelConcern",{fans_focusid:$(this).attr("searchid"),fans_id:uuid});
+                        }
+                    })
+                    $(".user-list-info-box").click(function () {
+                        // $.post("http://localhost:8080/userServlet?method=invite_others",{invite_id:$(this).attr("searchid")});
+                        window.localStorage.setItem("otherid",$(this).attr("searchid"));
+                        window.open("otherPersonalCenter.html");
+                    })
+                    $(".user-list-head-box").click(function () {
+                        console.log($(this).attr("searchid"));
+                        window.localStorage.setItem("otherid",$(this).attr("searchid"));
+                        window.open("otherPersonalCenter.html");
+                    })
+                }
+            })
+            event.stopPropagation();
+        }
+
+        //搜索歌手
+        function searchSingers(page) {
+            $(".pagenum2").html(page+1);
+            $("#page1").css("display","none");
+            $("#page2").css("display","block");
+            $("#page3").css("display","none");
+            $(".search-song-box").css("display","none");
+            $(".user-list").css("display","block");
+            axios({
+                method: 'POST',
+                url: 'http://localhost:8080/searchServlet?method=searchsinger',
+                data:{
+                    conn:conn,
+                    uuid:uuid,
+                    nowpage:page//当前页码
+                }
+            }).then(function (response) {
+                console.log(response);
+                if(response.data.code===200) {
+                    let data1 = response['data']['data'];
+                    $('#searchName').html(conn);
+                    $('#songRowNum').html(data1.length);
+                    $(".user-list").empty();
+                    console.log(data1.length);
+                    for(let i=0;i<data1.length;i++){
+                        console.log(data1[i]['focusid']);
+                        push_userlist(data1[i]);
+                    }
+                    $(".user-list-type").click(function () {
+                        console.log($(this).attr("searchid"));
+                        if($(this).attr("class")==="user-list-type user_type"){
+                            $(this).attr("class","user-list-type user_typeac");
+                            $(this).text("已关注");
+                            $.post("http://localhost:8080/userServlet?method=concern",{fans_focusid:$(this).attr("searchid"),fans_id:uuid});
+                        }else{
+                            $(this).attr("class",'user-list-type user_type');
+                            $(this).text("关注");
+                            $.post("http://localhost:8080/userServlet?method=cancelConcern",{fans_focusid:$(this).attr("searchid"),fans_id:uuid});
+                        }
+                    })
+                    $(".user-list-info-box").click(function () {
+                        // $.post("http://localhost:8080/userServlet?method=invite_others",{invite_id:$(this).attr("searchid")});
+                        window.localStorage.setItem("otherid",$(this).attr("searchid"));
+                        window.open("singerPersonalCenter.html");
+                    })
+                    $(".user-list-head-box").click(function () {
+                        console.log($(this).attr("searchid"));
+                        window.localStorage.setItem("otherid",$(this).attr("searchid"));
+                        window.open("singerPersonalCenter.html");
+                    })
+                }
+            })
+            event.stopPropagation();
+        }
+
+        //------搜索歌曲------
+        //上一页
+        function beforsong(){
+            console.log("歌曲上");
+            nowPage1 -= 1;
+            if(nowPage1<0){
+                nowPage1 = 0;
+            }
+            console.log("上一页" + nowPage1);
+            searchSongs(nowPage1);
+        }
+
+        //下一页
+        function nextsong(){
+            console.log("歌曲下");
+            nowPage1 += 1;
+            console.log("下一页" + nowPage1);
+            searchSongs(nowPage1);
+        }
+
+        //------搜索歌手------
+        //上一页
+        function beforsinger(){
+            console.log("歌手上");
+            nowPage2 -= 1;
+            if(nowPage2<0){
+                nowPage2 = 0;
+            }
+            console.log("上一页" + nowPage2);
+            searchSingers(nowPage2);
+        }
+
+        //下一页
+        function nextsinger(){
+            console.log("歌手下");
+            nowPage2 += 1;
+            console.log("下一页" + nowPage2);
+            searchSingers(nowPage2);
+        }
+
+        // ------搜索用户------
+        //上一页
+        function beforuser(){
+            console.log("用户上");
+            nowPage3 -= 1;
+            if(nowPage3<0){
+                nowPage3 = 0;
+            }
+            console.log("上一页" + nowPage3);
+            searchUsers(nowPage3);
+        }
+
+        //下一页
+        function nextuser(){
+            console.log("用户下");
+            nowPage3 += 1;
+            console.log("下一页" + nowPage3);
+            searchUsers(nowPage3);
+        }
+
+
+
+        //用户列表构造器
+        function push_userlist(data) {
+            let typebt = [["user_type","关注"],["user_typeac","已关注"]];
+            $(".user-list").append(`<div class="user-list-item-box")>
+                <div class="user-list-item-content">
+                <!--用户头像-->
+                <div class="user-list-head-box" searchid=${data['searchid']}>
+                <img src=${data['headimg']} class="user-list-head-img">
+                </div>
+                <!--用户信息-->
+                <div class="user-list-info-box">
+                <div class="user-list-info-name" searchid=${data['searchid']}>
+                <a href="#" style="text-decoration: none">${data['searchname']}</a>
+                </div>
+                <div class="user-list-intro-box">
+                    ${data['detail']}
+                </div>
+                </div>
+                <!--用户关注按钮-->
+                <div class="user-list-type-box">
+                <button searchid=${data['searchid']} class="user-list-type ${typebt[data['focusid']][0]}">
+                    ${typebt[data['focusid']][1]}
+                </button>
+                </div>
+                <!--用户粉丝数-->
+                <div class="user-list-info-fans-box">
+                <div class="user-list-fans">
+                    粉丝数: ${data['fans']}
+                </div>
+                </div>
+                </div>
+                </div>`)
+            }
+    </script>
+</body>
+</html>

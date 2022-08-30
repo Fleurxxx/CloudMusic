@@ -1,0 +1,365 @@
+html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+    position:relative;
+    overflow:hidden;
+}
+.header{
+    width:100%;
+    height:70px;
+    background:rgba(24,24,24,0.9);
+    display:flex;
+    flex-flow:row;
+    justify-content:center;
+}
+/* 顶部导航栏，发现音乐、我的音乐、动态、音乐人、搜索框、登录按钮 */
+.index-header{
+    width:auto;
+    height:90px;
+    background:rgba(24,24,24,0);
+    float:left;
+    display:flex;
+    flex-flow:row;
+    justify-content:center;
+    margin:0 auto;
+}
+/* LOGO */
+.LOGO{
+    height:70px;
+    width:150px;
+    color:#fff;
+    text-align:center;
+    font-size:20px;//大小
+    line-height:70px;
+    float:left;
+    margin-right:10px;
+}
+.LOGO img{
+    padding-top:15px;
+    width:40px;
+    height:40px;
+    color:#fff;
+    border-radius:21px;
+}
+.LOGO span{
+    padding-top:20px;
+    height:70px;
+    display:inline-block;
+    width:100px;
+}
+/* 发现音乐、我的音乐、动态、音乐人 */
+.index-header-nav{
+    height:70px;
+    width:400px;
+    float:left;
+    margin-right:10px;
+    position:relative;
+    float:left;
+}
+.index-header-nav input,.index-header-login input,.index-header-user input{
+    position:absolute;
+    width:100px;
+    height:70px;
+    margin:0;
+    padding:0;
+    opacity:0;
+}
+.index-header-nav input:nth-child(1){
+    left:0;
+}
+.index-header-nav input:nth-child(3){
+    left:100px;
+}
+.index-header-nav input:nth-child(5){
+    left:200px;
+}
+.index-header-nav input:nth-child(7){
+    left:300px;
+}
+/*设置按下去*/
+.index-header-nav input:checked+a{
+    background:#000;
+    color:#fff;
+}
+.index-header-nav a,.index-header-login a,.index-header-user a{
+    position:absolute;
+    width:100px;
+    height:70px;
+    margin:0;
+    padding:0;
+    color:#DEDEDE;
+    font-size:16px;
+    text-align:center;
+    line-height:70px;
+    transition:all 0.3s;
+    text-decoration:none;
+    overflow:hidden;
+}
+.index-header-nav a:after{ //写小三角形
+    content:"";
+    position:absolute;
+    width:0;
+    height:0;
+    bottom:-16px;
+    border:8px solid;
+    border-color:#000 #000 #D81E06 #000;
+    left:50%;
+    margin-left:-4px;
+    transition:all 0.3s;
+}
+.index-header-nav input:checked+a:after{
+    bottom:1px;
+}
+.index-header-nav a:hover{
+    background:#000;
+    color:#fff;
+}
+.index-header-nav a:nth-child(2){
+    left:0;
+}
+.index-header-nav a:nth-child(4){
+    left:100px;
+}
+.index-header-nav a:nth-child(6){
+    left:200px;
+}
+.index-header-nav a:nth-child(8){
+    left:300px;
+}
+/* 搜索框 */
+.index-header-seek{
+    height:70px;
+    width:300px;
+    float:left;
+    text-align:center;
+    margin-right:10px;
+    float:left;
+}
+.index-header-seek input:nth-child(1){
+    height:30px;
+    width:180px;
+    border-radius:5px 0 0 5px;
+    border:0;
+    padding-left:5px;
+}
+
+.index-header-seek input:nth-child(2){
+    height:32px;
+    width:50px;
+    border-radius:0 5px 5px 0;
+    border:0;
+    background:#D81E06;
+    color:#fff;
+}
+.index-header-seek input:nth-child(1):focus,
+.index-header-seek input:nth-child(2):focus{
+    outline:none;
+    border:0;
+}
+.index-header-seek form{
+    height:70px;
+    display:flex;
+    flex-flow:row;
+    justify-content:center;
+    align-items:center;
+}
+
+/* 搜索框 */
+.index-header-seek{
+    height:70px;
+    width:300px;
+    float:left;
+    text-align:center;
+    margin-right:10px;
+    float:left;
+}
+.index-header-seek input:nth-child(1){
+    height:30px;
+    width:180px;
+    border-radius:5px 0 0 5px;
+    border:0;
+    padding-left:5px;
+}
+
+.index-header-seek input:nth-child(2){
+    height:32px;
+    width:50px;
+    border-radius:0 5px 5px 0;
+    border:0;
+    background:#D81E06;
+    color:#fff;
+}
+.index-header-seek input:nth-child(1):focus,
+.index-header-seek input:nth-child(2):focus{
+    outline:none;
+    border:0;
+}
+.index-header-seek form{
+    height:70px;
+    display:flex;
+    flex-flow:row;
+    justify-content:center;
+    align-items:center;
+}
+/* 登录 */
+.index-header-login,.index-header-user{
+    position:relative;
+    height:70px;
+    width:100px;
+    float:left;
+    line-height:70px;
+    color:#666;
+    font-size:20px;
+}
+.a-head-immg{  //头像
+    width: 30px;
+    height: 30px;
+    font-size:16px;
+    /*float: left;*/
+    margin-left: 10px;
+    line-height:70px;
+}
+.index-header-login input:checked+a:after{
+    bottom:1px;
+}
+.index-header-user input:checked+a:after{
+    bottom:1px;
+}
+.index-header-login a:hover{
+    background:#000;
+    color:#fff;
+    left:0;
+}
+.index-header-user a:hover{
+    background:#000;
+    color:#fff;
+    left:0;
+}
+
+/*小导航栏*/
+.clear{
+    clear:both;
+}
+.header-a1-little-menu{
+
+    width:100%;
+    height:35px;
+    background:#D81E06;
+    display:flex;
+    flex-flow:row;
+    justify-content:center;
+}
+.header-a1-little-menu>div{
+    position:relative;
+    height:35px;
+    width:auto;
+    left:-265px;
+}
+.header-a1-little-menu input{
+    position:absolute;
+    width:50px;
+    height:22px;
+    margin:0;
+    border-radius:11px;
+    top:50%;
+    margin-top:-11px;
+}
+.header-a1-little-menu a{
+    position:absolute;
+    width:50px;
+    height:22px;
+    background:#D81E06;
+    color:#fff;
+    border-radius:11px;
+    text-align:center;
+    line-height:22px;
+    font-size:12px;
+    top:50%;
+    margin-top:-11px;
+    transition:all 0.3s;
+}
+.header-a1-little-menu a:hover{
+    background:#9B0909;
+}
+.header-a1-little-menu input:checked+a{
+    background:#9B0909;
+}
+.header-a1-little-menu input:nth-child(1){
+    left:0;
+}
+.header-a1-little-menu a:nth-child(2){
+    left:0;
+}
+.header-a1-little-menu input:nth-child(3){
+    left:70px;
+}
+.header-a1-little-menu a:nth-child(4){
+    left:70px;
+}
+.header-a1-little-menu input:nth-child(5){
+    left:140px;
+}
+.header-a1-little-menu a:nth-child(6){
+    left:140px;
+}
+.header-a1-little-menu input:nth-child(7){
+    left:210px;
+}
+.header-a1-little-menu a:nth-child(8){
+    left:210px;
+}
+.index-iframe{
+    width:100%;
+    height: 100%;
+    padding:0;
+    margin:0;
+    border:0;
+    background:#F5F5F5;
+    overflow:auto;
+}
+
+/*首页低端，也是音乐播放控制台*/
+.index-footer{
+    opacity: 0.8;
+    position: absolute;
+    width: 100%;
+    height: 70px;
+    background: red;
+    bottom: 0;
+    transition: all 0.3s;
+    line-height: 50px;
+}
+#songPlay_name{
+    position: absolute;
+    left: 200px;
+    color: white;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.audio_div audio{
+    position: absolute;
+    left: 50%;
+    top: 5px;
+    opacity: 1;
+    display: block;
+    width: 800px;
+    height: 40px;
+    margin: 0 auto;
+    margin-left: -400px;
+}
+.r {
+    float: right;
+}
+.l {
+    float: left;
+}
+.footer .main .content .strip {
+    margin-bottom: 30px;
+}
+.shengyin{
+    position: relative;
+    top: -30px;
+}

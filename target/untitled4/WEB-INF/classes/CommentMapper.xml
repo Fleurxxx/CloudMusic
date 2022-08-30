@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace=绑定一个指定的dao/mapper接口-->
+<mapper namespace="com.mapper.CommentMapper">
+
+    <!--    添加, 评论   -->
+    <insert id="comment" parameterType="com.entity.Comment">
+        insert into test_nc.comment (comm_state,parentCommentId,user_id,reply_id,song_id,comment_id,comment,send_time,user_name,reply_name,user_img,reply_img)
+        values (1,#{parentCommentId},#{user_id},#{reply_id},#{song_id},#{comment_id},#{comment},#{send_time},
+        (select user_name from test_nc.user where user_id = #{user_id}),
+        (select user_name from test_nc.user where user_id = #{reply_id}),
+        (select user_photo from test_nc.user where user_id = #{user_id}),
+        (select user_photo from test_nc.user where user_id = #{reply_id}));
+    </insert>
+
+    <!--  查找歌曲一级评论  -->
+    <select id="selectComment" resultType="com.entity.Comment">
+        select *
+        from test_nc.comment
+        where song_id=#{song_id} and parentCommentId=#{parentCommentId}
+        order by send_time desc
+        limit ${comm_state}, 5;
+    </select>
+
+    <!--  查找歌曲二级级评论  -->
+    <select id="listReplyComment" resultType="com.entity.Comment">
+        select *
+        from test_nc.comment
+        where song_id=#{song_id} and parentCommentId=#{parentCommentId}
+        order by send_time desc;
+    </select>
+
+    <!--删除评论-->
+    <insert id="deletecomment" parameterType="com.entity.Comment">
+        delete from test_nc.comment where comment_id=#{comment_id};
+    </insert>
+</mapper>

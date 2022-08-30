@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>评论</title>
+    <link rel="stylesheet" type="text/css" href="../css/comment.css">
+    <link rel="shortcut icon" href="../img/vectorgraph/icon.png" type="image/x-icon">
+    <script src="../js/jquery-3.2.1.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="comment-form" class="comment-form-div">
+    <div class="u-title u-title-1">
+        <h1><span class="f-ff2">评论</span></h1><span class="s-fc3">共<span class="j-flag-j">123</span>条评论</span>
+    </div>
+    <div class="m-cmmt">
+        <div class="iptarea">
+            <div class="head">
+                <img id="headimg" src="../img/images/默认头像.png" >
+            </div>
+        </div>
+        <div class="m-cmmtipt f-cb f-pr">
+            <!--获取当前博客id进行评论  使用隐藏域-->
+            <input type="hidden" name="songId" id="songId" th:value="${blog.id}">
+            <input type="hidden" name="userId" id="userId" value="-1">
+            <input type="hidden" name="parentCommentId" id="parentCommentId" value="-1">
+            <div class="u-txtwrap holder-parent f-pr">
+                <textarea class="u-txt area j-flag" name="content" id="content" placeholder="请输入评论信息..."></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="btns f-cb f-pr">
+        <div class="field  m-margin-bottom-small m-mobile-wide">
+            <button id="commentpost-btn" type="button" class="btn u-btn u-btn-1"><i class="edit icon"></i>发布</button>
+            <button style="border: transparent"></button>
+        </div>
+    </div>
+
+
+
+    <div  class="ui bottom attached segment" th:if="${blog.commentabled}">
+        <!--评论区域列表-->
+        <div id="comment-container"  class="ui teal segment">
+            <div th:fragment="commentList">
+                <div class="ui-threaded-comments" style="max-width: 100%;">
+
+                    <div class="comment-title">
+                        <h3 class="f-ff3">最新评论</h3>
+                    </div>
+                    <div class="page-btn">
+                        <button class="before-btn" id="beforepage" type="button" onclick=javascrtpt:beforcomment()>上一页</button>
+                        <span class="pagenum"></span>
+                        <button class="next-btn" id="nextpage" type="button" onclick=javascrtpt:nextcomment()>下一页</button>
+                    </div>
+                    <div class="comment-list">
+                        <!--歌曲评论-->
+                        <div class="comment1" >
+                            <div class="iptarea">
+                                <div class="head">
+                                    <img src="../img/images/默认头像.png" >
+                                </div>
+                            </div>
+                            <div class="content">
+                                <a class="author" >
+                                    <span class="con-name" >Matt</span>
+                                    <!--                                <--判断是不是该歌曲歌手&ndash;&gt;-->
+                                    <span class="con-tag" >作者</span>
+                                    <span class="con-date" >Today at 5:42PM</span>
+                                </a>
+                                <div class="text" >
+                                    How artistic!
+                                </div>
+                                <div class="actions">
+                                    <a class="reply" data-commentid="1" data-commentnickname="Matt"  onclick="reply(this)">回复</a>
+                                    <a class="delete" href="#"  onclick="return confirm('确定要删除该评论吗？')" th:if="${session.user}">删除</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--子集评论-->
+                        <div class="comment2" th:if="${#arrays.length(comment.replyComments)}>0">
+                            <div class="comment" th:each="reply : ${comment.replyComments}">
+                                <div class="iptarea" style="margin-left: 80px">
+                                    <div class="head">
+                                        <img src="../img/images/默认头像.png" th:src="@{${reply.avatar}}">
+                                    </div>
+                                </div>
+                                <div class="content" style="margin-left: 80px">
+                                    <a class="author" >
+                                        <span class="con-name" th:text="${reply.nickname}">小红</span>
+                                        <!--若是该歌曲歌手 给标签-->
+                                        <span class="con-tag" th:if="${reply.adminComment}">作者</span>
+                                        &nbsp;<span style="color: #0c73c2;" th:text="|@ ${reply.parentNickname}|" class="m-teal">@ 小白</span>
+                                        <span class="con-date" th:text="${#dates.format(reply.createTime,'yyyy-MM-dd HH:mm')}">Today at 5:42PM</span>
+                                    </a>
+                                    <div class="text" th:text="${reply.content}">
+                                        How artistic!
+                                    </div>
+                                    <div class="actions">
+                                        <a class="reply" data-commentid="1" data-commentnickname="Matt" th:attr="data-commentid=${reply.id},data-commentnickname=${reply.nickname}" onclick="reply(this)">回复</a>
+                                        <a class="delete"  href="#" th:href="@{/comment/{param1}/{param2}/delete(param1=${reply.blogId},param2=${reply.id})}" onclick="return confirm('确定要删除该评论吗！')" th:if="${session.user}">删除</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bottom-bottom"></div>
+<script>
+    //获取
+    let thissongid = localStorage.getItem('thisSongid');
+    let pageNow=0;
+
+    //初始化
+    $(function () {
+        {
+            axios({
+                method: 'POST',
+                url: 'http://localhost:8080/userServlet?method=getUserMsg',
+            }).then(function (response) {
+                console.log(response);
+                if(response.data.code===200) {
+                    let data=response['data'];
+                    $("#headimg").attr("src", data['data']['user_photo']);
+                }
+            })
+        }
+        getcomment(pageNow);
+    })
+
+
+    window.onload=function () {
+        document.getElementById("commentpost-btn").onclick=function () {
+            console.log("我点了");
+            upbutton();
+        }
+    }
+
+    function getZero(num) {
+        // 单数前面加0
+        if (parseInt(num) < 10) {
+            num = '0' + num;
+        }
+        return num;
+    }
+
+    //点击发布按钮触发
+    function upbutton() {
+        let comments=document.getElementById("content").value;
+        if(comments==""){
+            alert("请输入评论内容");
+        }else{
+            let time = new Date();//获得时间
+            let nian = time.getFullYear();//获得年份
+            let dt = time.getMonth();//获得月份
+            let r = time.getDate();//获得日期
+            let shi=time.getHours();
+            let fen=time.getMinutes();
+            let miao=time.getSeconds();
+            let newtime = nian + "-" + (dt+1) + "-" + r  + " " + getZero(shi) + ":" + getZero(fen) +":" + getZero(miao);
+            let pCommentId = document.getElementById("parentCommentId").value;//被回复评论的id
+            let uId = document.getElementById("userId").value;
+            console.log(newtime);
+            let songid = localStorage.getItem('thisSongid');
+            console.log(songid);
+            axios({
+                method:'POST',
+                url:'http://localhost:8080/commentServlet?method=sendComment',
+                data: {
+                    user_id: uId,
+                    song_id: songid,
+                    parentCommentId: pCommentId,
+                    comment: comments,
+                    send_time: newtime
+                }
+            }).then(function (response) {
+                console.log(response);
+                // alert(response.data.message);
+                if(response.data.code===200)
+                {
+                    //表单验证后发送请求到后端，提交成功之后清空表单
+                    console.log("评论成功");
+                    pageNow=0;
+                    getcomment(pageNow);
+                    // $(window).scrollTo($('#goto'),500);  //提交成功之后滚动到评论位置
+                    clearContent();
+                }
+            })
+        }
+
+    }
+
+    function clearContent() {
+        $("#content").val('');
+        $("#userId").val(-1);
+        $("#parentCommentId").val(-1);
+        $("#content").attr("placeholder", "请输入评论信息...");
+    }
+
+    //回复
+    function reply(obj) {
+        let userId = $(obj).attr("reply_id");
+        let parentCommentId = $(obj).attr('parentCommentId');
+        let userName = $(obj).attr('reply_name');
+        console.log(parentCommentId);
+        console.log(userId);
+        console.log(userName);
+        $("#content").attr("placeholder", "@"+userName);//在回复时显示  @对应人
+        $("#parentCommentId").val(parentCommentId);//为隐藏域赋值
+        $("#userId").val(userId);//为隐藏域赋值
+        // $(window).scrollTo(0,500);  //滚动
+    }
+
+
+
+    function getcomment(cnt) {
+        $(".pagenum").html(cnt+1);
+        let pCommentId = document.getElementById("parentCommentId").value;//被回复评论的id
+        axios({
+            method: 'POST',
+            url: 'http://localhost:8080/commentServlet?method=initComment',
+            data:{
+                song_id: thissongid,
+                parentCommentId:pCommentId,
+                comm_state: cnt //当前页数
+            }
+        }).then(function (response) {
+            console.log(response);
+            if(response.data.code===200) {
+                let data1 = response['data']['data'];
+                $(".j-flag-j").html(data1.length);
+                $(".comment-list").empty();
+                // console.log(data1.length);
+                for(let i=0;i<data1.length;i++){
+                    // console.log(data1[i]);
+                    // console.log("  " +data1[i]['reply_state']);
+                    // if(data1[i]['reply_state']==="我"){
+                    //     $(".delete").css("display","block");
+                    //     console.log("我自己");
+                    //     $("#deletecomm").show();
+                    // }else if(data1[i]['reply_state']==="*"){
+                    //     $("#deletecomm").css("display","none");
+                    //     $("#deletecomm").hide();
+                    // }
+                    push_commentlist(data1[i]);
+                    console.log("回复评论："+data1[i]['replyComments'].length);
+                    for(let j=0; j<data1[i]['replyComments'].length; j++){
+                        let data2 = data1[i]['replyComments'];
+                        console.log(data2[j]);
+                        $(".delete1").show();
+                        console.log(data2[j]['comment'] +" " +data2[j]['reply_state']);
+                        // $(".delete1").removeAttr("style","");
+                        console.log(typeof data2[j]['reply_state']);
+                        push_replycommentlist(data1[i]['replyComments'][j]);
+
+                        // if(data2[j]['reply_state']==='我'){
+                        //     // $(".delete1").css("display","none");
+                        //     $(".delete1").hide();
+                        //     // $(".delete1").css("display","block");
+                        //     console.log("是我自己");
+                        //
+                        // }
+                        // $(".delete1").show();
+                    }
+                }
+
+            }
+        })
+    }
+
+
+    function deletec(obj) {
+        let commentId = $(obj).attr("comment_id");
+        console.log(commentId);
+        // if (confirm('确定要删除吗') == true) {
+            if(alert('你确定要删除吗')==true) {
+            {
+                axios({
+                    method:'POST',
+                    url:'http://localhost:8080/commentServlet?method=deleteComment',
+                    data: {
+                        comment_id:commentId
+                    }
+                }).then(function (response) {
+                    console.log(response);
+                    if(response.data.code===200)
+                    {
+                        getcomment(pageNow);
+                    }
+                })
+            }
+
+        }
+
+    }
+
+    //上一页
+    function beforcomment(){
+        console.log("什么？？？？？？？？？？？？");
+        pageNow -= 1;
+        if(pageNow<0){
+            pageNow = 0;
+        }
+        console.log(pageNow);
+        getcomment(pageNow);
+    }
+
+    //下一页
+    function nextcomment(){
+        pageNow += 1;
+        console.log(pageNow);
+        getcomment(pageNow);
+    }
+
+    //评论构造器
+    function push_commentlist(data) {
+        let louzhu;
+        $(".comment-list").append(` <div class="comment" >
+        <div class="iptarea">
+        <div class="head">
+        <img src=${data['reply_img']}>
+    </div>
+    </div>
+    <div class="content">
+        <a class="author" >
+        <span class="con-name" >${data['reply_name']}</span>
+        <!-- <&#45;&#45;判断是不是该歌曲歌手&ndash;&gt;-->
+        <span class="con-tag" >${data['reply_state']}</span>
+        <span class="con-date">${data['send_time']}</span>
+    </a>
+    <div class="text">
+        ${data['comment']}
+        </div>
+        <div class="actions">
+        <a class="reply" data-commentid="1" data-commentnickname="Matt" reply_id=${data['reply_id']} reply_name="${data['reply_name']}" parentCommentId="${data['comment_id']}" onclick="reply(this)">回复</a>
+        <a class="delete" id="deletecomm" href="#" reply_id=${data['reply_id']} comment_id=${data['comment_id']} onclick="deletec(this)" >删除</a>
+        </div>
+        </div>
+        </div>`)
+        }
+
+    //二级评论构造器
+    function push_replycommentlist(data) {
+        let louzhu;
+        $(".comment-list").append(` <div class="comment" >
+            <div class="iptarea" style="margin-left: 80px">
+                <div class="head">
+                    <img  src=${data['reply_img']}>
+                </div>
+            </div>
+            <div class="content" style="margin-left: 80px">
+                <a class="author" >
+                    <span class="con-name" >${data['reply_name']}</span>
+                    <!--若是该歌曲歌手 给标签-->
+                    <span class="con-tag" >${data['reply_state']}</span>
+                    <span style="color: #0c73c2;" class="m-teal"> @ ${data['user_name']}</span>
+                    <span class="con-date" >${data['send_time']}</span>
+                </a>
+                <div class="text" >
+                     ${data['comment']}
+                </div>
+                <div class="actions">
+                    <a class="reply" data-commentid="1" data-commentnickname="Matt" reply_id=${data['reply_id']} reply_name="${data['reply_name']}" parentCommentId="${data['parentCommentId']}" onclick="reply(this)">回复</a>
+                    <a class="delete1" id="deletecomm1" href="#"  comment_id=${data['comment_id']}  onclick="deletec(this)" >删除</a>
+                </div>
+            </div>
+        </div>`)
+        }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link rel="stylesheet" type="text/css" href="../css/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/musicPage.css"/>
+    <link rel="shortcut icon" href="../img/vectorgraph/icon.png" type="image/x-icon">
+</head>
+<script src="../js/jquery-3.2.1.js" type="text/javascript"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<!--<script type="text/javascript" src="../js/musicPageScript.js"></script>-->
+<body>
+    <div class="header">
+        <!-- 顶部导航栏，发现音乐、我的音乐、动态、音乐人、搜索框、登录按钮 -->
+        <header class="index-header" id="index_header">
+            <!--  标志  -->
+            <div class="LOGO">
+                <img class="LOGO" src = "../img/images/logo.png" align="center"> <span>网易云音乐</span>
+            </div>
+            <!-- 发现音乐、我的音乐、动态、音乐人 -->
+            <nav class="index-header-nav">
+                <input type="radio" id="header_radio1" checked="checked" name="indexHeaderA" />
+                <a href="indexIframe.html" target="main" id="header_a1">发现音乐</a>
+                <input type="radio" id="header_radio2" name="indexHeaderA" />
+                <a href="list.html" id="header_a2">我的音乐</a>
+                <input type="radio" id="header_radio3" name="indexHeaderA" />
+                <a id="header_a3">动态</a>
+                <input type="radio" id="header_radio4" name="indexHeaderA" />
+                <a id="header_a4">音乐人</a>
+            </nav>
+            <!-- 搜索框 -->
+            <div class="index-header-seek">
+                <form action="/userServlet?method=search" method="post">
+                    <input type="text" id="searchSongName_input" align="center" placeholder="输入关键词" />
+                    <input type="button" id="search_button" name="search_button" onclick=javascrtpt:searchbut() value="搜索" align="center" />
+                </form>
+            </div>
+            <!--  登录  -->
+            <div class="index-header-login"  id="index-login-div">
+                <input type="radio" id="header_radio5" checked="checked" name="indexHeaderA" />
+                <a href="login.html">登录</a>
+            </div>
+            <!--  用户  -->
+            <div class="index-header-user" id="index-user-div">
+                <input type="radio" id="header_radio6" checked="checked" name="indexHeaderA" />
+                <img class="a-head-immg" src="../img/images/头像2.png" style="vertical-align: middle">
+                <a class="a-head-name" target="main"  href="personalCenter.html">Diaozy-</a>
+            </div>
+            <span class="msg-userid" id="userid"></span>
+        </header>
+    </div>
+<!--    中间的小导航栏-->
+    <div class="clear"></div>
+    <div class="header-a1-little-menu">
+        <div>
+            <input type="radio" id="little_menu_input1" checked="checked" name="menu_input" />
+            <a href="indexIframe.html" target="main" id="menu_a1">推荐</a>
+            <input type="radio" id="little_menu_input2" name="menu_input" />
+            <a href="SongRankingList.html" target="main" id="menu_a2">排行榜</a>
+            <input type="radio" id="little_menu_input3" name="menu_input" />
+            <a href="songList.html" target="main" id="menu_a3">歌单</a>
+            <input type="radio" id="little_menu_input4" name="menu_input" />
+            <a id="menu_a4">歌手</a>
+        </div>
+    </div>
+    <iframe class="index-iframe" src="indexIframe.html" name="main" id="main">
+
+    </iframe>
+    <div class="index-footer" >
+        <div class="footer">
+            <div class="main">
+
+                <div class="l left">
+                    <span class="last iconfont icon-kuaitui" title="上一首"></span>&nbsp;&nbsp;
+                    <span class="play iconfont Iconfont icon-zanting" title="播放"></span>&nbsp;&nbsp;
+                    <span class="next iconfont icon-kuaijin" title="下一首"></span>
+                </div>
+
+                <div class="content clearfix">
+                    <a class="l" ><img id="musicImg"  src="" onclick=javascrtpt:fullScreen() title="点击全屏"></a>&nbsp;
+                    <div class="Box">
+                        <span class="songName l"></span><span class="l">&nbsp;-&nbsp;</span><span class="singer l"></span>
+                        <span class="r">
+								<span class="realTime">00:00</span>&nbsp;/&nbsp;<span class="totalTime"></span>
+							</span><br>
+                        <div class="strip">
+                            <div class="progress"></div>
+                            <span class="spot"></span>
+                        </div>
+                    </div>
+                    <div class="volumeBox" style="display: none;">
+                        <div class="groove">
+                            <div class="volume"></div>
+                            <span class="volumeSpot"></span>
+                        </div>
+                        <div class="triangle"></div>
+                    </div>&nbsp;&nbsp;
+                    <span class="shengyin iconfont icon-shengyin"></span>
+                </div>
+
+                <div class="r right">
+                    <div class="list" style="display: none;">
+                        <div class="Song"></div>
+                    </div>
+                    <div class="listTriangle" style="display: none;"></div>
+                    <div class="gengduoBox" style="display: none;">
+                        <span class="project iconfont icon-fenxiang" title="分享"></span>
+                        <div class="boxTriangle" style="display: none;"></div>
+                    </div>
+                    <span class="iconfont loop icon-liebiaoxunhuan" title="循环方式"></span>&nbsp;&nbsp;&nbsp;
+                    <span class="iconfont love icon-xihuan1" title="喜欢"></span>&nbsp;&nbsp;&nbsp;
+                    <span class="iconfont icon-liebiao liebiao" title="播放列表" style="font-size: 26px;"></span>&nbsp;&nbsp;&nbsp;
+                    <span class="iconfont icon-shezhi gengduo" title="更多" style="font-size: 26px;"></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<!--    <footer class="index-footer">-->
+<!--        <div class="audio_div">-->
+<!--            <span id="songPlay_name" style="display: inline-block;"></span>-->
+<!--            <audio id="myMusic" src="" autoplay="autoplay" controls="controls" >-->
+            <audio id="myMusic" src="" controls="controls" >
+                您的浏览器不支持 audio 元素。
+            </audio>
+<!--        </div>-->
+<!--    </footer>-->
+    <script>
+        $("#index-user-div").hide();
+        $("#userid").hide();
+        jQuery(function($){
+            {
+                axios({
+                    method: 'POST',
+                    url: 'http://localhost:8080/userServlet?method=getUserMsg',
+                }).then(function (response) {
+                    console.log(response);
+                    if(response.data.code===200) {
+                        let data=response['data'];
+                        // $("#index-login-div").css("display","none");//隐藏div
+                        // $("#index-user-div").attr("style","display:block;");//显示div
+                        $("#index-login-div").hide();
+                        $("#index-user-div").show();
+                        $(".a-head-immg").attr("src", data['data']['user_photo']);
+                        $('.a-head-name').html(data['data']['user_name']);
+                        $('.msg-userid').val(data['data']['user_id']);
+                    }else{
+                        $("#index-user-div").hide();
+                        $("#index-login-div").show();
+                    }
+                })
+            }
+            //底部播放音乐div
+            $(".index_footer").mouseover(function(){
+                $(this).css("height","60px");
+            })
+            $(".index_footer").mouseout(function(){
+                $(this).css("height","10px");
+            })
+            let musicsrc = localStorage.getItem("musicsrc"); //获取指定key本地存储的值
+            let imgsrc = localStorage.getItem("imgsrc");
+            let musicname = localStorage.getItem("musicname");
+            $("#myMusic").attr("src",musicsrc);//当前播放歌曲路径
+            $("#musicImg").attr("src",imgsrc);//当前播放歌曲封面
+            $(".songName").html(musicname);//当前播放歌曲名字
+            console.log(musicsrc);
+            console.log(imgsrc);
+            let musicid = localStorage.getItem("musicid");
+            localStorage.setItem("ssid",musicid);
+            console.log(musicid);
+
+            //初始化播放器的喜欢按钮
+            axios({
+                method:'POST',
+                url:'http://localhost:8080/songServlet?method=lovestate',
+                data:{
+                    songid:musicid
+                }
+            }).then(function (response) {
+                console.log(response);
+                if(response.data.code===200)
+                {
+                    if(response.data.data===1){
+                        oLove.className = "iconfont love icon-xihuan2";
+                        console.log("喜欢过啦！");
+                    }else{
+                        oLove.className = "iconfont love icon-xihuan1";
+                        console.log("还没喜欢过哦！");
+                    }
+                }
+            })
+        });
+
+        //搜索按钮
+        function searchbut() {
+            let val = document.getElementById("searchSongName_input").value;
+            let uuid = document.getElementById("userid").value;
+            //储存.定义key,value值，value为传递的参数
+            //把输入内容从主页面传给搜索的子页面
+            localStorage.setItem("content", val);
+            localStorage.setItem("uuserid", uuid);
+
+            function search_but() {
+                window.main.location.href = "search.html";//子网页跳转
+            }
+            search_but();
+        }
+
+        //歌曲全屏
+        function fullScreen() {
+            function again() {
+                let musicid = localStorage.getItem("musicid");
+                localStorage.setItem("ssid",musicid);
+                console.log(musicid)
+                window.location.href = "musicPage.html";//网页跳转
+            }
+            again();
+        }
+
+    </script>
+    <script type="text/javascript" src="../js/musicPageSelector.js"></script>
+    <script>
+
+        window.onload = function() {
+
+            /* 个位数转两位数 */
+            function doubleNum(n){
+                return (n <10) ? ("0" + n) : (n);
+            }
+
+            /* 定时器 */
+            function oTimer(){
+                real = setInterval( function(){
+                    realTime = parseInt(myMusic.currentTime);
+                    realMinute = doubleNum(parseInt(realTime/60));
+                    realSecond = doubleNum(realTime%60);
+                    oRealTime.innerHTML = realMinute + ":" + realSecond;
+                    left = (realTime*600)/totalTime;
+                    oSpot.style.left = (left-10) + "px";
+                    oProgress.style.width = left + "px";
+                    if(myMusic.ended){
+                        Play = false;
+                        oPaly.className = "play iconfont Iconfont icon-zanting";
+                        oPaly.title = "播放";
+                    }
+                },1000)
+            }
+
+
+
+            /* 音频时间 */
+            //总时长
+            var real;
+            var myMusic = $("#myMusic");
+            var totalTime;
+            var totalMinute;
+            var totalSecond;
+            var oTotalTime;
+            /* 确保获取成功 */
+            setTimeout( function(){
+                console.log("什么？"+myMusic.readyState);
+                if(myMusic.readyState == 4){
+                    totalTime = parseInt(myMusic.duration);
+                }else{
+                    // location.reload();
+                }
+                totalMinute = doubleNum(parseInt(totalTime/60));
+                totalSecond = doubleNum(totalTime%60);
+                oTotalTime = $(".totalTime")[0];
+                oTotalTime.innerHTML = totalMinute + ":" + totalSecond;
+            },200);
+            /* 当前时长 */
+            var realTime = parseInt(myMusic.currentTime);
+            var realMinute = doubleNum(parseInt(realTime/60));
+            var realSecond = doubleNum(realTime%60);
+            var oRealTime = $(".realTime")[0];
+            /* 音量 */
+            var oShengyin = $(".icon-shengyin")[0];
+            var oVolumeBox = $(".volumeBox")[0];
+            var display = false;
+            oShengyin.onclick = function(){
+                if(display){
+                    oVolumeBox.style.display = "none";
+                    display = false;
+                }else{
+                    oVolumeBox.style.display = "";
+                    display = true;
+                }
+            }
+
+            /* 音量进度条 */
+            var oVolume = $(".volume")[0];
+            var ovolumeSpot = $(".volumeSpot")[0];
+            ovolumeSpot.onmousedown = function(event){
+                event = event || window.event;
+                var offsetY = event.clientY - ovolumeSpot.offsetTop + ovolumeSpot.offsetHeight/2;
+                document.onmousemove = function(event){
+                    var bottom = (80- (event.clientY - offsetY));
+                    if(bottom < 0){
+                        bottom = 0;
+                    }else if(bottom > 80){
+                        bottom =80;
+                    }
+                    ovolumeSpot.style.bottom = (bottom + 5) + "px";
+                    oVolume.style.height = bottom + "px";
+                    myMusic.volume = bottom/80;
+                }
+            }
+            document.onmouseup  = function(){
+                myMusic.muted = false; //静音取消
+                document.onmousemove = null;
+                oVolumeBox.style.display = "none";
+                display = false;
+            }
+
+
+
+            /* 歌曲进度条 */
+            var oProgress = $(".progress")[0];
+            var oSpot = $(".spot")[0];
+            progress();
+            function progress(){
+                oSpot.onmousedown = function(event){
+                    event = event || window.event; //兼容
+                    //           获取水平坐标 - 进度条到页面最左侧的距离 - 进度条的总长度/2
+                    var offsetX = event.clientX - oSpot.offsetLeft - oSpot.offsetWidth/2;
+                    document.onmousemove = function(event){//拖动时改变进度条和歌曲音频进度同步
+                        console.log("啊？？"+offsetX);
+                        myMusic.muted = true; //被静音
+                        var left = event.clientX - offsetX; //歌曲当前进度长度
+                        if(left < 0){
+                            left = 0;
+                        }else if(left > 600){
+                            left =600;
+                        }
+                        oSpot.style.left = (left-10) + "px";
+                        oProgress.style.width = left + "px";
+                        realTime = parseInt((left*totalTime)/600);
+                        realMinute = doubleNum(parseInt(realTime/60));
+                        realSecond = doubleNum(realTime%60);
+                        oRealTime = $(".realTime")[0];
+                        myMusic.currentTime = realTime;
+                        oRealTime.innerHTML = realMinute + ":" + realSecond; //当前播放时间显示
+                    }
+                }
+            }
+
+
+
+            /* 播放/暂停 */
+            var oPaly = $(".play")[0];
+            var Play = false;
+            oPaly.onclick = function(){
+                if(Play){
+                    myMusic.pause();
+                    Play = false;
+                    oPaly.className = "play iconfont Iconfont icon-zanting";
+                    oPaly.title = "播放";
+                    clearInterval(real);
+                }else{
+                    myMusic.play();
+                    Play = true;
+                    oPaly.className = "play iconfont Iconfont icon-bofang";
+                    oPaly.title = "暂停";
+                    /* 当前时长 */
+                    oTimer();
+                }
+            }
+        }
+
+
+        /* 喜爱 */
+        var oLove = $(".love")[0];
+        var state = false;
+        oLove.onclick = function(){
+            let musicid = localStorage.getItem("musicid");
+            if(state){//已经喜欢，点击后取消喜欢
+                oLove.className = "iconfont love icon-xihuan1";
+                state = false;
+                axios({
+                    method:'POST',
+                    dataType:"json",
+                    url:'http://localhost:8080/songServlet?method=cancelLoveSong',
+                    data: {
+                        song_id: musicid
+                    }
+                }).then(function (response) {
+                    console.log(response);
+                    // alert(response.data.message);
+                    if(response.data.code===200)
+                    {
+                        console.log("取消喜欢成功");
+                        window.main.location.href = "indexIframe.html";//子网页跳转
+                        // location.reload(true);
+                    }else{
+                        console.log("操作失败，仍喜欢");
+                    }
+                });
+            }else{//为喜欢，点击后喜欢
+                oLove.className = "iconfont love icon-xihuan2";
+                state = true;
+                axios({
+                    method:'POST',
+                    dataType:"json",
+                    url:'http://localhost:8080/songServlet?method=loveSong',
+                    data: {
+                        song_id: musicid
+                    }
+                }).then(function (response) {
+                    console.log(response);
+                    // alert(response.data.message);
+                    if(response.data.code===200)
+                    {
+                        console.log("喜欢成功");
+                        window.main.location.href = "indexIframe.html";//子网页跳转
+                        // location.reload(true);
+                    }else{
+                        console.log("加入喜欢的列表失败或者已经存在该音乐");
+                    }
+                });
+            }
+        }
+
+
+
+    </script>
+</body>
+</html>

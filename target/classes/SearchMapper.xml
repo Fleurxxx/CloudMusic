@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace=绑定一个指定的dao/mapper接口-->
+<mapper namespace="com.mapper.SearchMapper">
+
+    <!-- 结果集映射 -->
+    <resultMap id="tosearchUser" type="com.entity.SearchUser">
+        <!-- column数据库中的字段，property实体类中的属性 -->
+        <result column="user_photo" property="headimg"/>
+        <result column="user_name" property="searchname"/>
+        <result column="user_id" property="searchid"/>
+        <result column="user_detail" property="detail"/>
+        <result column="fans_type" property="focusid"/>
+    </resultMap>
+    <resultMap id="tosearchSinger" type="com.entity.SearchUser">
+        <!-- column数据库中的字段，property实体类中的属性 -->
+        <result column="singer_photo" property="headimg"/>
+        <result column="singer_name" property="searchname"/>
+        <result column="singer_id" property="searchid"/>
+        <result column="singer_details" property="detail"/>
+        <result column="fans_type" property="focusid"/>
+    </resultMap>
+
+
+    <!--搜索用户-->
+    <select id="searchUser" resultMap="tosearchUser">
+        select  a.user_id, a.user_photo, a.user_name, a.user_detail,b.fans_type
+        from test_nc.user as a
+        left join test_nc.fans as b on a.user_id=b.fans_focusid and b.fans_id=#{uuid}
+        where a.user_name like '%' #{conn} '%' and a.user_id!=#{uuid}
+        limit ${nowpage}, 5;
+    </select>
+
+
+    <!--搜索歌手-->
+    <select id="searchSinger" resultMap="tosearchUser">
+        select  a.user_id, a.user_photo, a.user_name, a.user_detail,b.fans_type
+        from test_nc.user as a
+        left join test_nc.fans as b on a.user_id=b.fans_focusid and b.fans_id=#{uuid}
+        where a.user_name like '%' #{conn} '%' and a.user_id!=#{uuid} and a.user_type=2
+        limit ${nowpage}, 5;
+    </select>
+
+
+    <!--搜索歌曲-->
+    <select id="searchSong" parameterType="com.entity.Song"  resultType="com.entity.Song">
+        select song_name, song_id, song_singerid, song_singername, song_path, photo_path
+        from test_nc.song
+        where song_name like '%' #{conn} '%'
+        limit ${type}, 6;
+    </select>
+
+</mapper>
